@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b0c10" />
+  <title>Racing Hub — Admin</title>
+  <style>
+    :root{
+      --bg:#0b0c10; --panel:#131622; --txt:#e8ebf3; --muted:#a6adbf; --line:#242a3a;
+      --red:#e10600; --red2:#ff2a22; --good:#23c483; --warn:#ffcc00; --bad:#ff4d4d;
+      --shadow2: 0 10px 30px rgba(0,0,0,.45);
+      --radius: 18px; --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+      --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --focus: 0 0 0 3px rgba(225,6,0,.35), 0 0 0 1px rgba(255,255,255,.05) inset;
+      --max: 1200px; --navH: 72px;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; font-family:var(--sans); color:var(--txt); line-height:1.45; overflow-x:hidden;
+      background:
+        radial-gradient(1200px 800px at 15% -10%, rgba(225,6,0,.20), transparent 55%),
+        radial-gradient(900px 700px at 95% 10%, rgba(255,42,34,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg), #07080c 65%, #05060a);
+    }
+    a{ color:inherit; text-decoration:none; }
+    button,input,select,textarea{ font:inherit; color:inherit; background:transparent; }
+    :focus-visible{ outline:none; box-shadow:var(--focus); border-radius:10px; }
+
+    header.navbar{
+      position:fixed; top:0; left:0; right:0; height:var(--navH); z-index:1000;
+      backdrop-filter: blur(10px);
+      background: rgba(10,11,16,.72);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .nav-wrap{
+      max-width:var(--max); margin:0 auto; height:100%;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 16px; gap:12px;
+    }
+    .brand{ display:flex; align-items:center; gap:12px; min-width:220px; }
+    .logo{
+      width:44px; height:44px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(225,6,0,.95), rgba(255,42,34,.55));
+      box-shadow: 0 10px 24px rgba(225,6,0,.18);
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .logo svg{ width:30px; height:30px; opacity:.95; }
+    .brand-title{ display:flex; flex-direction:column; gap:2px; line-height:1.1; }
+    .brand-title strong{ letter-spacing:.08em; font-size:12px; color:#fff; text-transform:uppercase; }
+    .brand-title span{ font-family:var(--mono); font-size:11px; color:var(--muted); }
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:11px 14px; border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      cursor:pointer; user-select:none;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      font-weight:700; letter-spacing:.02em; white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.16); }
+    .btn.primary{
+      border-color: rgba(225,6,0,.40);
+      background: linear-gradient(135deg, rgba(225,6,0,.92), rgba(255,42,34,.50));
+      box-shadow: 0 14px 28px rgba(225,6,0,.18);
+    }
+    .btn.ghost{ background:transparent; border-color: rgba(255,255,255,.12); }
+    .btn.small{ padding:9px 12px; border-radius:12px; font-size:13px; }
+
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      color: var(--muted); font-size:12px; line-height:1;
+    }
+    .chip b{ color:#fff; font-weight:800; letter-spacing:.06em; }
+    .mono{ font-family:var(--mono); }
+
+    .toast{
+      position:fixed; left:50%; transform:translateX(-50%); bottom:16px; z-index:2100;
+      min-width:min(720px, calc(100% - 24px));
+      display:none; padding:12px 14px; border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(15,17,24,.92);
+      box-shadow: var(--shadow2);
+      color:#fff;
+    }
+    .toast.show{ display:block; }
+    .toast small{ color:var(--muted); display:block; margin-top:4px; }
+
+    main{ position:relative; }
+    .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding: calc(var(--navH) + 16px) 16px 72px;
+      display:grid; grid-template-columns: 320px 1fr; gap:14px; align-items:start;
+    }
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .panel .inner{ padding:16px; }
+
+    .title{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:10px; }
+    .title h1{ margin:0; font-size:18px; letter-spacing:.02em; }
+    .sub{ margin:6px 0 0 0; color:var(--muted); font-size:13px; max-width:75ch; }
+
+    .tabs{ display:grid; gap:10px; }
+    .tab{
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      padding:12px; border-radius:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      cursor:pointer; user-select:none;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+    .tab:hover{ transform: translateY(-1px); border-color: rgba(225,6,0,.22); background: rgba(255,255,255,.04); }
+    .tab.active{ border-color: rgba(225,6,0,.35); background: linear-gradient(135deg, rgba(225,6,0,.14), rgba(255,255,255,.02)); }
+    .tab b{ font-size:13px; }
+    .tab small{ color:var(--muted); font-family:var(--mono); }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      font-size:12px; color: var(--muted); white-space:nowrap;
+    }
+    .badge.good{ border-color: rgba(35,196,131,.28); background: rgba(35,196,131,.10); color:#c7ffe9;}
+    .badge.warn{ border-color: rgba(255,204,0,.24); background: rgba(255,204,0,.10); color:#fff0b3;}
+    .badge.bad{ border-color: rgba(255,77,77,.35); background: rgba(255,77,77,.10); color:#ffd1d1;}
+
+    .section-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:12px; }
+    .section-head h2{ margin:0; font-size:16px; letter-spacing:.02em; }
+
+    .grid{ display:grid; gap:12px; }
+    .grid.cols-2{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .grid.cols-3{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .field{ display:flex; flex-direction:column; gap:6px; min-width:200px; }
+    .field label{ color:var(--muted); font-size:12px; letter-spacing:.02em; }
+    .input, select, textarea{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius:14px;
+      padding:11px 12px;
+      outline:none;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .input:hover, select:hover, textarea:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.04); }
+
+    .table-wrap{ overflow:auto; border-radius:16px; border:1px solid rgba(255,255,255,.08); }
+    table{ width:100%; border-collapse:collapse; min-width:760px; }
+    th, td{ text-align:left; padding:10px 10px; border-bottom:1px solid rgba(255,255,255,.06); vertical-align:top; font-size:13px; }
+    th{
+      position:sticky; top:0; z-index:2;
+      background: rgba(15,17,24,.92);
+      backdrop-filter: blur(8px);
+      color: rgba(255,255,255,.75);
+      letter-spacing:.06em;
+      text-transform: uppercase;
+      font-size: 11px;
+      white-space:nowrap;
+    }
+    td input{ width:100%; padding:9px 10px; border-radius:12px; border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.03); }
+    td .mini-btns{ display:flex; gap:8px; justify-content:flex-end; align-items:center; white-space:nowrap; }
+
+    .help{ color:var(--muted); font-size:12px; margin-top:10px; }
+
+    .row-actions{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      margin-top: 10px; border-top:1px solid rgba(255,255,255,.08); padding-top:12px;
+    }
+    .row-actions .left, .row-actions .right{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+
+    .hidden{ display:none !important; }
+    @media (max-width: 980px){ .wrap{ grid-template-columns: 1fr; } }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="nav-wrap">
+      <a class="brand" href="./team.html" aria-label="Racing Hub">
+        <div class="logo" aria-hidden="true" title="Racing Hub">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M10 44V20h14c9 0 14 4 14 12s-5 12-14 12H10Z" stroke="white" stroke-width="4" opacity="0.92"/>
+            <path d="M42 44V20h12" stroke="white" stroke-width="4" opacity="0.85"/>
+            <path d="M42 32h10" stroke="white" stroke-width="4" opacity="0.85"/>
+            <path d="M10 48h44" stroke="white" stroke-width="3" opacity="0.25"/>
+          </svg>
+        </div>
+        <div class="brand-title">
+          <strong>RACING HUB</strong>
+          <span class="mono">Admin • login</span>
+        </div>
+      </a>
+
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <span class="chip" id="teamChip"><b>TEAM</b> • <span class="mono">...</span></span>
+        <a class="btn small ghost" id="btnOpenTeam" href="./team.html" title="Abrir página da equipa">Abrir equipa ↗</a>
+        <button class="btn small" id="btnSetToken" title="Login/Logout">Login</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <main>
+    <div class="wrap">
+      <aside class="panel">
+        <div class="inner">
+          <div class="title">
+            <div>
+              <h1>Admin</h1>
+              <p class="sub">Login + autosave no servidor.</p>
+            </div>
+          </div>
+
+          <div class="tabs" id="tabs">
+            <div class="tab active" data-tab="tab-config">
+              <div><b>Config / Branding</b><small class="mono">team + theme</small></div>
+              <span class="badge">1</span>
+            </div>
+
+            <div class="tab" data-tab="tab-trainings">
+              <div><b>Treinos</b><small class="mono">trainings</small></div>
+              <span class="badge">2</span>
+            </div>
+
+            <div class="tab" data-tab="tab-races">
+              <div><b>Calendário</b><small class="mono">races</small></div>
+              <span class="badge">3</span>
+            </div>
+          </div>
+
+          <div class="help">
+            Dica: usa <span class="mono">?team=mafia</span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel">
+        <div class="inner">
+
+          <div id="tab-config">
+            <div class="section-head">
+              <div>
+                <h2>Config / Branding</h2>
+                <p class="sub">Guarda em <span class="mono">/api/teams/&lt;slug&gt;/config</span>.</p>
+              </div>
+              <span class="badge" id="statusConfig">—</span>
+            </div>
+
+            <div class="grid cols-2">
+              <div class="field">
+                <label>Nome da equipa</label>
+                <input class="input" id="cfgTeamName" placeholder="Ex: DOWNFORCE MAFIA">
+              </div>
+              <div class="field">
+                <label>Tagline</label>
+                <input class="input" id="cfgTagline" placeholder="Ex: Clean Racing • Real Pace">
+              </div>
+              <div class="field">
+                <label>Discord URL</label>
+                <input class="input" id="cfgDiscord" placeholder="https://discord.gg/...">
+              </div>
+              <div class="field">
+                <label>Email</label>
+                <input class="input" id="cfgEmail" placeholder="team@...">
+              </div>
+              <div class="field">
+                <label>Cor primária</label>
+                <input class="input" id="cfgPrimary" placeholder="#e10600">
+              </div>
+              <div class="field">
+                <label>Cor acento</label>
+                <input class="input" id="cfgAccent" placeholder="#ff2a22">
+              </div>
+            </div>
+
+            <div class="grid cols-3" style="margin-top:12px;">
+              <div class="field">
+                <label>Open Practice — dia (dow)</label>
+                <select id="cfgOpenDow">
+                  <option value="0">0 — Domingo</option>
+                  <option value="1">1 — Segunda</option>
+                  <option value="2">2 — Terça</option>
+                  <option value="3">3 — Quarta</option>
+                  <option value="4">4 — Quinta</option>
+                  <option value="5">5 — Sexta</option>
+                  <option value="6">6 — Sábado</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Open Practice — hora</label>
+                <input class="input" id="cfgOpenTime" placeholder="21:00">
+              </div>
+              <div class="field">
+                <label>Open Practice — label</label>
+                <input class="input" id="cfgOpenLabel" placeholder="Open practice (sextas)">
+              </div>
+            </div>
+
+            <div class="grid cols-3" style="margin-top:12px;">
+              <div class="field">
+                <label>Ativar Loja</label>
+                <select id="cfgFeatStore">
+                  <option value="true">Sim</option>
+                  <option value="false">Não</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Ativar Streaming</label>
+                <select id="cfgFeatStreaming">
+                  <option value="true">Sim</option>
+                  <option value="false">Não</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Ativar Recrutamento</label>
+                <select id="cfgFeatRecruit">
+                  <option value="true">Sim</option>
+                  <option value="false">Não</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row-actions">
+              <div class="left">
+                <button class="btn small primary" id="btnForceSaveConfig">Guardar agora</button>
+                <button class="btn small ghost" id="btnReloadConfig">Recarregar</button>
+              </div>
+              <div class="right">
+                <span class="badge good" id="draftStatus">Autosave ON</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-trainings" class="hidden">
+            <div class="section-head">
+              <div>
+                <h2>Treinos</h2>
+                <p class="sub">Guarda em <span class="mono">/api/teams/&lt;slug&gt;/trainings</span>.</p>
+              </div>
+              <span class="badge" id="statusTrainings">—</span>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>dow</th><th>dayLabel</th><th>title</th><th>time</th><th>details</th><th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="trainingsBody"></tbody>
+              </table>
+            </div>
+
+            <div class="row-actions">
+              <div class="left">
+                <button class="btn small primary" id="btnAddTraining">Adicionar</button>
+                <button class="btn small" id="btnForceSaveTrainings">Guardar agora</button>
+                <button class="btn small ghost" id="btnReloadTrainings">Recarregar</button>
+              </div>
+              <div class="right">
+                <span class="badge" id="trainingsCount">0 itens</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-races" class="hidden">
+            <div class="section-head">
+              <div>
+                <h2>Calendário (corridas)</h2>
+                <p class="sub">Guarda em <span class="mono">/api/teams/&lt;slug&gt;/races</span>.</p>
+              </div>
+              <span class="badge" id="statusRaces">—</span>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>date</th><th>time</th><th>serie</th><th>track</th><th>car</th><th>format</th><th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="racesBody"></tbody>
+              </table>
+            </div>
+
+            <div class="row-actions">
+              <div class="left">
+                <button class="btn small primary" id="btnAddRace">Adicionar</button>
+                <button class="btn small" id="btnForceSaveRaces">Guardar agora</button>
+                <button class="btn small ghost" id="btnReloadRaces">Recarregar</button>
+              </div>
+              <div class="right">
+                <span class="badge" id="racesCount">0 itens</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // ====== CONFIG ======
+    const API_BASE = "https://racinghub-api.onrender.com";
+
+    // ====== Helpers ======
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+    function showToast(title, msg){
+      const t = $("#toast");
+      t.innerHTML = `${title}<small>${msg || ""}</small>`;
+      t.classList.add("show");
+      setTimeout(()=>t.classList.remove("show"), 3200);
+    }
+
+    function debounce(fn, ms){
+      let t = null;
+      return (...args) => { clearTimeout(t); t = setTimeout(()=>fn(...args), ms); };
+    }
+
+    function setStatus(el, text, kind){
+      el.textContent = text;
+      el.classList.remove("good","warn","bad");
+      if (kind) el.classList.add(kind);
+    }
+
+    // ===== AUTH (JWT) =====
+    function getToken(){
+      return localStorage.getItem("RH_AUTH_TOKEN") || "";
+    }
+    function setToken(token){
+      localStorage.setItem("RH_AUTH_TOKEN", token);
+    }
+    function clearToken(){
+      localStorage.removeItem("RH_AUTH_TOKEN");
+    }
+
+    async function doLogin(){
+      const username = prompt("Utilizador:");
+      const password = prompt("Password:");
+      if (!username || !password) return false;
+
+      const r = await fetch(API_BASE + "/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+
+      if (!r.ok){
+        showToast("❌ Login", "Credenciais inválidas.");
+        return false;
+      }
+
+      const { token } = await r.json();
+      setToken(token);
+      showToast("✅ Login", "Sessão iniciada.");
+      return true;
+    }
+
+    function doLogout(){
+      clearToken();
+      showToast("👋 Logout", "Sessão terminada.");
+    }
+
+    async function apiGet(path){
+      const r = await fetch(API_BASE + path, {
+        headers: { Authorization: "Bearer " + getToken() }
+      });
+      if (!r.ok) throw new Error(await r.text());
+      return r.json();
+    }
+
+    async function apiPut(path, body){
+      const r = await fetch(API_BASE + path, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + getToken()
+        },
+        body: JSON.stringify(body)
+      });
+      if (!r.ok) throw new Error(await r.text());
+      return r.json();
+    }
+
+    // ====== Team slug ======
+    function getTeamSlug(){
+      const qs = new URLSearchParams(location.search);
+      const qTeam = (qs.get("team") || "").trim();
+      if (qTeam) return qTeam;
+
+      const parts = (location.pathname || "/").split("/").filter(Boolean);
+      if (parts.length >= 2 && parts[1].toLowerCase().includes("admin")) return parts[0];
+      return "default";
+    }
+
+    const teamSlug = getTeamSlug();
+    document.title = `Racing Hub — Admin (${teamSlug})`;
+    $("#teamChip").innerHTML = `<b>TEAM</b> • <span class="mono">${teamSlug}</span>`;
+    $("#btnOpenTeam").href = `./team.html?team=${encodeURIComponent(teamSlug)}`;
+
+    // ====== State ======
+    const state = {
+      config: {
+        team: {
+          slug: teamSlug,
+          name: teamSlug.toUpperCase(),
+          tagline: "Clean Racing • Real Pace",
+          timezone: "Europe/Lisbon",
+          language: "pt-PT",
+          discordUrl: "",
+          email: ""
+        },
+        theme: { primary: "#e10600", accent: "#ff2a22" },
+        openPractice: { dow: 5, time: "21:00", label: "Open practice (sextas)" },
+        features: { store: true, streaming: true, recruitmentForm: true }
+      },
+      trainings: [],
+      races: []
+    };
+
+    // ====== Tabs ======
+    function switchTab(tabId){
+      $$("#tabs .tab").forEach(t => t.classList.toggle("active", t.dataset.tab === tabId));
+      ["#tab-config","#tab-trainings","#tab-races"].forEach(id=>{
+        $(id).classList.toggle("hidden", id !== `#${tabId}`);
+      });
+    }
+    $$("#tabs .tab").forEach(t => t.addEventListener("click", ()=> switchTab(t.dataset.tab)));
+
+    // ====== Config UI bind ======
+    const cfg = {
+      name: $("#cfgTeamName"),
+      tagline: $("#cfgTagline"),
+      discord: $("#cfgDiscord"),
+      email: $("#cfgEmail"),
+      primary: $("#cfgPrimary"),
+      accent: $("#cfgAccent"),
+      openDow: $("#cfgOpenDow"),
+      openTime: $("#cfgOpenTime"),
+      openLabel: $("#cfgOpenLabel"),
+      featStore: $("#cfgFeatStore"),
+      featStreaming: $("#cfgFeatStreaming"),
+      featRecruit: $("#cfgFeatRecruit")
+    };
+
+    function fillConfigUI(){
+      cfg.name.value = state.config.team.name || "";
+      cfg.tagline.value = state.config.team.tagline || "";
+      cfg.discord.value = state.config.team.discordUrl || "";
+      cfg.email.value = state.config.team.email || "";
+      cfg.primary.value = state.config.theme.primary || "#e10600";
+      cfg.accent.value = state.config.theme.accent || "#ff2a22";
+      cfg.openDow.value = String(state.config.openPractice.dow ?? 5);
+      cfg.openTime.value = state.config.openPractice.time || "21:00";
+      cfg.openLabel.value = state.config.openPractice.label || "";
+      cfg.featStore.value = String(!!state.config.features.store);
+      cfg.featStreaming.value = String(!!state.config.features.streaming);
+      cfg.featRecruit.value = String(!!state.config.features.recruitmentForm);
+    }
+
+    function readConfigUI(){
+      state.config.team.slug = teamSlug;
+      state.config.team.name = (cfg.name.value || "").trim();
+      state.config.team.tagline = (cfg.tagline.value || "").trim();
+      state.config.team.discordUrl = (cfg.discord.value || "").trim();
+      state.config.team.email = (cfg.email.value || "").trim();
+      state.config.theme.primary = (cfg.primary.value || "").trim() || "#e10600";
+      state.config.theme.accent = (cfg.accent.value || "").trim() || "#ff2a22";
+      state.config.openPractice.dow = parseInt(cfg.openDow.value, 10);
+      state.config.openPractice.time = (cfg.openTime.value || "").trim() || "21:00";
+      state.config.openPractice.label = (cfg.openLabel.value || "").trim();
+      state.config.features.store = (cfg.featStore.value === "true");
+      state.config.features.streaming = (cfg.featStreaming.value === "true");
+      state.config.features.recruitmentForm = (cfg.featRecruit.value === "true");
+    }
+
+    const saveConfigDebounced = debounce(async ()=>{
+      try{
+        readConfigUI();
+        setStatus($("#statusConfig"), "A guardar…", "warn");
+        await apiPut(`/api/teams/${teamSlug}/config`, state.config);
+        setStatus($("#statusConfig"), "Guardado", "good");
+      }catch(e){
+        if (String(e).includes("401")){
+          setStatus($("#statusConfig"), "Sem login", "bad");
+        } else {
+          setStatus($("#statusConfig"), "Erro ao guardar", "bad");
+        }
+      }
+    }, 800);
+
+    Object.values(cfg).forEach(el=>{
+      el.addEventListener("input", saveConfigDebounced);
+      el.addEventListener("change", saveConfigDebounced);
+    });
+
+    $("#btnForceSaveConfig").addEventListener("click", async ()=>{
+      try{
+        readConfigUI();
+        setStatus($("#statusConfig"), "A guardar…", "warn");
+        await apiPut(`/api/teams/${teamSlug}/config`, state.config);
+        setStatus($("#statusConfig"), "Guardado", "good");
+        showToast("✅ Config", "Guardada no servidor.");
+      }catch(e){
+        setStatus($("#statusConfig"), "Erro ao guardar", "bad");
+        showToast("⚠️ Config", "Falha ao guardar (login?).");
+      }
+    });
+
+    // ====== Trainings ======
+    function renderTrainings(){
+      const body = $("#trainingsBody");
+      body.innerHTML = "";
+
+      state.trainings.forEach((it, idx)=>{
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><input value="${it.dow ?? 5}" data-k="dow" data-i="${idx}" /></td>
+          <td><input value="${(it.dayLabel || "")}" data-k="dayLabel" data-i="${idx}" /></td>
+          <td><input value="${(it.title || "")}" data-k="title" data-i="${idx}" /></td>
+          <td><input value="${(it.time || "")}" data-k="time" data-i="${idx}" placeholder="21:00" /></td>
+          <td><input value="${(it.details || "")}" data-k="details" data-i="${idx}" /></td>
+          <td><div class="mini-btns"><button class="btn small" data-act="del" data-i="${idx}">Remover</button></div></td>
+        `;
+        body.appendChild(tr);
+      });
+
+      $("#trainingsCount").textContent = `${state.trainings.length} itens`;
+
+      body.querySelectorAll("input").forEach(inp=>{
+        inp.addEventListener("input", ()=>{
+          const i = parseInt(inp.dataset.i,10);
+          const k = inp.dataset.k;
+          let v = inp.value;
+          if (k === "dow") v = parseInt(v || "0", 10);
+          state.trainings[i][k] = v;
+          saveTrainingsDebounced();
+        });
+      });
+
+      body.querySelectorAll("button[data-act='del']").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const i = parseInt(btn.dataset.i,10);
+          state.trainings.splice(i,1);
+          renderTrainings();
+          saveTrainingsDebounced();
+        });
+      });
+    }
+
+    const saveTrainingsDebounced = debounce(async ()=>{
+      try{
+        setStatus($("#statusTrainings"), "A guardar…", "warn");
+        await apiPut(`/api/teams/${teamSlug}/trainings`, state.trainings);
+        setStatus($("#statusTrainings"), "Guardado", "good");
+      }catch(e){
+        setStatus($("#statusTrainings"), "Erro ao guardar", "bad");
+      }
+    }, 800);
+
+    $("#btnAddTraining").addEventListener("click", ()=>{
+      state.trainings.push({ dow: 2, dayLabel: "Terça", title: "Treino", time: "21:00", details: "" });
+      renderTrainings();
+      saveTrainingsDebounced();
+    });
+
+    $("#btnForceSaveTrainings").addEventListener("click", async ()=>{
+      try{
+        setStatus($("#statusTrainings"), "A guardar…", "warn");
+        await apiPut(`/api/teams/${teamSlug}/trainings`, state.trainings);
+        setStatus($("#statusTrainings"), "Guardado", "good");
+        showToast("✅ Treinos", "Guardados no servidor.");
+      }catch(e){
+        setStatus($("#statusTrainings"), "Erro ao guardar", "bad");
+        showToast("⚠️ Treinos", "Falha ao guardar (login?).");
+      }
+    });
+
+    // ====== Races ======
+    function renderRaces(){
+      const body = $("#racesBody");
+      body.innerHTML = "";
+
+      state.races.forEach((it, idx)=>{
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><input value="${(it.date || "")}" data-k="date" data-i="${idx}" placeholder="2026-02-01" /></td>
+          <td><input value="${(it.time || "")}" data-k="time" data-i="${idx}" placeholder="21:30" /></td>
+          <td><input value="${(it.serie || "")}" data-k="serie" data-i="${idx}" /></td>
+          <td><input value="${(it.track || "")}" data-k="track" data-i="${idx}" /></td>
+          <td><input value="${(it.car || "")}" data-k="car" data-i="${idx}" /></td>
+          <td><input value="${(it.format || "")}" data-k="format" data-i="${idx}" /></td>
+          <td><div class="mini-btns"><button class="btn small" data-act="del" data-i="${idx}">Remover</button></div></td>
+        `;
+        body.appendChild(tr);
+      });
+
+      $("#racesCount").textContent = `${state.races.length} itens`;
+
+      body.querySelectorAll("input").forEach(inp=>{
+        inp.addEventListener("input", ()=>{
+          const i = parseInt(inp.dataset.i,10);
+          const k = inp.dataset.k;
+          state.races[i][k] = inp.value;
+          saveRacesDebounced();
+        });
+      });
+
+      body.querySelectorAll("button[data-act='del']").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const i = parseInt(btn.dataset.i,10);
+          state.races.splice(i,1);
+          renderRaces();
+          saveRacesDebounced();
+        });
+      });
+    }
+
+    const saveRacesDebounced = debounce(async ()=>{
+      try{
+        setStatus($("#statusRaces"), "A guardar…", "warn");
+        await apiPut(`/api/teams/${teamSlug}/races`, state.races);
+        setStatus($("#statusRaces"), "Guardado", "good");
+      }catch(e){
+        setStatus($("#statusRaces"), "Erro ao guardar", "bad");
+      }
+    }, 800);
+
+    $("#btnAddRace").addEventListener("click", ()=>{
+      state.races.push({ date: "", time: "21:00", serie: "", track: "", car: "", format: "" });
+      renderRaces();
+      saveRacesDebounced();
+    });
+
+    $("#btnForceSaveRaces").addEventListener("click", async ()=>{
+      try{
+        setStatus($("#statusRaces"), "A guardar…", "warn");
+        await apiPut(`/api/teams/${teamSlug}/races`, state.races);
+        setStatus($("#statusRaces"), "Guardado", "good");
+        showToast("✅ Corridas", "Guardadas no servidor.");
+      }catch(e){
+        setStatus($("#statusRaces"), "Erro ao guardar", "bad");
+        showToast("⚠️ Corridas", "Falha ao guardar (login?).");
+      }
+    });
+
+    // ====== Load from server ======
+    async function loadConfig(){
+      try{
+        setStatus($("#statusConfig"), "A carregar…", "warn");
+        const cfgFromApi = await apiGet(`/api/teams/${teamSlug}/config`);
+        if (cfgFromApi && typeof cfgFromApi === "object" && Object.keys(cfgFromApi).length){
+          state.config = cfgFromApi;
+          state.config.team = state.config.team || {};
+          state.config.team.slug = teamSlug;
+        }
+        fillConfigUI();
+        setStatus($("#statusConfig"), "Carregado", "good");
+      }catch(e){
+        fillConfigUI();
+        setStatus($("#statusConfig"), "Sem dados (guarda)", "warn");
+      }
+    }
+
+    async function loadTrainings(){
+      try{
+        setStatus($("#statusTrainings"), "A carregar…", "warn");
+        const tr = await apiGet(`/api/teams/${teamSlug}/trainings`);
+        state.trainings = Array.isArray(tr) ? tr : [];
+        renderTrainings();
+        setStatus($("#statusTrainings"), "Carregado", "good");
+      }catch(e){
+        state.trainings = [];
+        renderTrainings();
+        setStatus($("#statusTrainings"), "Sem dados", "warn");
+      }
+    }
+
+    async function loadRaces(){
+      try{
+        setStatus($("#statusRaces"), "A carregar…", "warn");
+        const rc = await apiGet(`/api/teams/${teamSlug}/races`);
+        state.races = Array.isArray(rc) ? rc : [];
+        renderRaces();
+        setStatus($("#statusRaces"), "Carregado", "good");
+      }catch(e){
+        state.races = [];
+        renderRaces();
+        setStatus($("#statusRaces"), "Sem dados", "warn");
+      }
+    }
+
+    $("#btnReloadConfig").addEventListener("click", loadConfig);
+    $("#btnReloadTrainings").addEventListener("click", loadTrainings);
+    $("#btnReloadRaces").addEventListener("click", loadRaces);
+
+    // ====== Login/Logout button ======
+    const btn = document.querySelector("#btnSetToken");
+    function refreshLoginButton(){
+      btn.textContent = getToken() ? "Logout" : "Login";
+    }
+    refreshLoginButton();
+
+    btn.onclick = async () => {
+      if (getToken()){
+        doLogout();
+        refreshLoginButton();
+        return;
+      }
+      const ok = await doLogin();
+      refreshLoginButton();
+      if (ok){
+        await loadConfig();
+        await loadTrainings();
+        await loadRaces();
+      }
+    };
+
+    // ====== Boot ======
+    (async function boot(){
+      if (!getToken()){
+        const ok = await doLogin();
+        refreshLoginButton();
+        if (!ok){
+          setStatus($("#statusConfig"), "Sem login", "bad");
+          setStatus($("#statusTrainings"), "Sem login", "bad");
+          setStatus($("#statusRaces"), "Sem login", "bad");
+          return;
+        }
+      } else {
+        refreshLoginButton();
+      }
+
+      await loadConfig();
+      await loadTrainings();
+      await loadRaces();
+      showToast("✅ Pronto", "Admin ligado ao backend.");
+    })();
+  </script>
+</body>
+</html>

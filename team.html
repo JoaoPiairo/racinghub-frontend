@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Racing Hub — Team</title>
+  <style>
+    body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:#0b0c10; color:#e8ebf3; }
+    .wrap{ max-width:900px; margin:0 auto; padding:24px; }
+    .card{ background:#131622; border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:16px; margin:12px 0; }
+    pre{ white-space:pre-wrap; word-break:break-word; margin:0; }
+    a{ color:#ff2a22; text-decoration:none; }
+    .muted{ color:#a6adbf; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Team</h1>
+    <p class="muted">Página simples para veres os dados vindos do backend (debug).</p>
+    <p><a id="adminLink" href="./admin.html">↩ Admin</a></p>
+
+    <div class="card">
+      <h3>Config</h3>
+      <pre id="cfg">A carregar…</pre>
+    </div>
+
+    <div class="card">
+      <h3>Trainings</h3>
+      <pre id="tr">A carregar…</pre>
+    </div>
+
+    <div class="card">
+      <h3>Races</h3>
+      <pre id="rc">A carregar…</pre>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "https://racinghub-api.onrender.com";
+    const $ = (s)=>document.querySelector(s);
+
+    function getTeamSlug(){
+      const qs = new URLSearchParams(location.search);
+      return (qs.get("team") || "default").trim() || "default";
+    }
+    const teamSlug = getTeamSlug();
+    $("#adminLink").href = `./admin.html?team=${encodeURIComponent(teamSlug)}`;
+
+    function token(){
+      return localStorage.getItem("RH_ADMIN_TOKEN") || "";
+    }
+
+    async function apiGet(path){
+      const r = await fetch(API_BASE + path, {
+        headers: { Authorization: "Bearer " + token() }
+      });
+      if (!r.ok) throw new Error(await r.text());
+      return r.json();
+    }
+
+    (async function(){
+      try{
+        const cfg = await apiGet(`/api/teams/${teamSlug}/config`);
+        $("#cfg").textContent = JSON.stringify(cfg, null, 2);
+      }catch(e){ $("#cfg").textContent = "Sem acesso (token?)"; }
+
+      try{
+        const tr = await apiGet(`/api/teams/${teamSlug}/trainings`);
+        $("#tr").textContent = JSON.stringify(tr, null, 2);
+      }catch(e){ $("#tr").textContent = "Sem acesso (token?)"; }
+
+      try{
+        const rc = await apiGet(`/api/teams/${teamSlug}/races`);
+        $("#rc").textContent = JSON.stringify(rc, null, 2);
+      }catch(e){ $("#rc").textContent = "Sem acesso (token?)"; }
+    })();
+  </script>
+</body>
+</html>
