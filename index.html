@@ -1,22 +1,20 @@
 <!doctype html>
-<html lang="pt-PT">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#0b0c10" />
-  <title>DOWNFORCE MAFIA — iRacing Team • Clean Racing • Real Pace</title>
+  <title>Downforce Mafia — Micro-SaaS for iRacing Teams</title>
   <style>
     :root{
       --bg:#0b0c10;
-      --bg2:#11131a;
+      --bg2:#0f1118;
       --panel:#131622;
-      --panel2:#0f1118;
       --txt:#e8ebf3;
       --muted:#a6adbf;
       --line:#242a3a;
       --red:#e10600;
       --red2:#ff2a22;
-      --metal:#b8c0d4;
       --good:#23c483;
       --warn:#ffcc00;
       --bad:#ff4d4d;
@@ -27,10 +25,9 @@
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       --focus: 0 0 0 3px rgba(225,6,0,.35), 0 0 0 1px rgba(255,255,255,.05) inset;
-      --max: 1200px;
+      --max: 1160px;
       --navH: 72px;
     }
-
     *{ box-sizing:border-box; }
     html{ scroll-behavior:smooth; }
     body{
@@ -45,31 +42,22 @@
       line-height:1.45;
       overflow-x:hidden;
     }
-
     a{ color:inherit; text-decoration:none; }
-    button, input, select, textarea{
-      font:inherit;
-      color:inherit;
-      background:transparent;
-    }
+    button, input, select, textarea{ font:inherit; color:inherit; background:transparent; }
     ::selection{ background: rgba(225,6,0,.35); }
-
-    /* Accessibility */
     :focus-visible{ outline:none; box-shadow: var(--focus); border-radius: 10px; }
-    .sr-only{
-      position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
-      clip:rect(0,0,0,0); white-space:nowrap; border:0;
-    }
 
-    /* Top glow + scanline */
+    /* scanline */
     .scanline{
       position:fixed; inset:0; pointer-events:none;
-      background:
-        repeating-linear-gradient(180deg, rgba(255,255,255,.03) 0, rgba(255,255,255,.03) 1px, transparent 1px, transparent 3px);
-      opacity:.06;
-      mix-blend-mode: overlay;
-      z-index:1;
+      background: repeating-linear-gradient(180deg, rgba(255,255,255,.03) 0, rgba(255,255,255,.03) 1px, transparent 1px, transparent 3px);
+      opacity:.06; mix-blend-mode: overlay; z-index:1;
     }
+
+    /* layout */
+    main{ position:relative; z-index:2; }
+    section{ scroll-margin-top: calc(var(--navH) + 16px); padding: 72px 16px; }
+    .container{ max-width: var(--max); margin:0 auto; }
 
     /* NAV */
     header.navbar{
@@ -92,10 +80,10 @@
     }
     .brand{
       display:flex; align-items:center; gap: 12px;
-      min-width: 210px;
+      min-width: 240px;
     }
     .logo{
-      width: 44px; height:44px; flex:0 0 auto;
+      width: 44px; height:44px;
       border-radius: 12px;
       background: linear-gradient(135deg, rgba(225,6,0,.95), rgba(255,42,34,.55));
       box-shadow: 0 10px 24px rgba(225,6,0,.18);
@@ -103,51 +91,30 @@
       border: 1px solid rgba(255,255,255,.10);
     }
     .logo svg{ width: 30px; height: 30px; opacity:.95; }
-    .brand-title{
-      display:flex; flex-direction:column; gap:2px;
-      line-height:1.1;
-    }
+    .brand-title{ display:flex; flex-direction:column; gap:2px; line-height:1.1; }
     .brand-title strong{
       letter-spacing:.08em;
       font-size: 12px;
       color: #fff;
       text-transform:uppercase;
     }
-    .brand-title span{
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--muted);
-    }
+    .brand-title span{ font-family: var(--mono); font-size: 11px; color: var(--muted); }
 
-    nav.primary{
-      flex:1 1 auto;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-    }
+    nav.primary{ flex:1 1 auto; display:flex; justify-content:center; }
     .nav-links{
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      flex-wrap: nowrap;
-      overflow:auto;
-      scrollbar-width: none;
+      display:flex; gap: 10px; align-items:center;
+      overflow:auto; scrollbar-width:none;
     }
     .nav-links::-webkit-scrollbar{ display:none; }
-
     .nav-links a{
-      position:relative;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
+      display:inline-flex; align-items:center; gap:8px;
       padding: 10px 10px;
       border-radius: 12px;
       color: var(--muted);
-      white-space: nowrap;
       border: 1px solid transparent;
       transition: transform .15s ease, background .15s ease, color .15s ease, border-color .15s ease;
       font-size: 13px;
+      white-space:nowrap;
     }
     .nav-links a:hover{
       transform: translateY(-1px);
@@ -160,20 +127,14 @@
       background: linear-gradient(135deg, rgba(225,6,0,.22), rgba(255,255,255,.03));
       border-color: rgba(225,6,0,.35);
     }
-    .nav-actions{
-      display:flex; align-items:center; gap: 10px;
-      min-width: 260px;
-      justify-content:flex-end;
-    }
+    .nav-actions{ display:flex; align-items:center; gap: 10px; min-width: 290px; justify-content:flex-end; }
     .chip{
       display:inline-flex; align-items:center; gap:8px;
-      padding: 10px 12px;
-      border-radius: 999px;
+      padding: 10px 12px; border-radius: 999px;
       border: 1px solid rgba(255,255,255,.08);
       background: rgba(255,255,255,.03);
       color: var(--muted);
-      font-size: 12px;
-      line-height:1;
+      font-size: 12px; line-height:1;
     }
     .chip b{ color:#fff; font-weight:700; letter-spacing:.06em; }
 
@@ -193,20 +154,14 @@
     .btn:active{ transform: translateY(0px); }
     .btn.primary{
       border-color: rgba(225,6,0,.40);
-      background: linear-gradient(135deg, rgba(225,6,0,.90), rgba(255,42,34,.45));
+      background: linear-gradient(135deg, rgba(225,6,0,.92), rgba(255,42,34,.45));
       box-shadow: 0 14px 28px rgba(225,6,0,.18);
     }
     .btn.primary:hover{ border-color: rgba(255,255,255,.16); box-shadow: 0 18px 36px rgba(225,6,0,.22); }
-    .btn.ghost{
-      background: transparent;
-      border-color: rgba(255,255,255,.12);
-    }
+    .btn.ghost{ background: transparent; border-color: rgba(255,255,255,.12); }
     .btn.small{ padding: 9px 12px; border-radius: 12px; font-size: 13px; }
     .btn.tiny{ padding: 8px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-    .btn.danger{
-      border-color: rgba(255,77,77,.35);
-      background: rgba(255,77,77,.10);
-    }
+    .btn.danger{ border-color: rgba(255,77,77,.35); background: rgba(255,77,77,.10); }
 
     .hamburger{
       display:none;
@@ -214,8 +169,7 @@
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.03);
-      cursor:pointer;
-      place-items:center;
+      cursor:pointer; place-items:center;
     }
     .hamburger span{
       display:block; width:18px; height:2px;
@@ -229,55 +183,10 @@
     .hamburger span::before{ top:-6px; opacity:.85; }
     .hamburger span::after{ top:6px; opacity:.85; }
 
-    /* SECTIONS */
-    main{ position:relative; z-index:2; }
-    section{
-      scroll-margin-top: calc(var(--navH) + 16px);
-      padding: 68px 16px;
-    }
-    .container{
-      max-width: var(--max);
-      margin:0 auto;
-    }
-    .section-head{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-    .section-head h2{
-      margin:0;
-      font-size: 22px;
-      letter-spacing:.02em;
-    }
-    .section-head p{
-      margin:0;
-      color: var(--muted);
-      max-width: 62ch;
-      font-size: 13px;
-    }
-
-    .panel{
-      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow2);
-      overflow:hidden;
-    }
-    .panel .inner{ padding: 16px; }
-    .grid{
-      display:grid;
-      gap: 14px;
-    }
-    .grid.cols-2{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid.cols-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .grid.cols-4{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
-
     /* HERO */
     .hero{
       padding-top: calc(var(--navH) + 18px);
-      padding-bottom: 44px;
+      padding-bottom: 46px;
       position:relative;
       overflow:hidden;
     }
@@ -298,12 +207,12 @@
     .hero .container{ position:relative; z-index:2; }
     .hero-grid{
       display:grid;
-      grid-template-columns: 1.3fr .7fr;
+      grid-template-columns: 1.25fr .75fr;
       gap: 16px;
       align-items:stretch;
     }
     .hero-card{
-      padding: 20px;
+      padding: 22px;
       border-radius: 24px;
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(10,11,16,.40);
@@ -342,36 +251,11 @@
     .hero h1 .accent{ color: var(--red2); }
     .hero .sub{
       margin:0 0 16px 0;
-      color: var(--metal);
+      color: rgba(184,192,212,.95);
       font-size: 14px;
-      max-width: 70ch;
+      max-width: 72ch;
     }
-    .hero .cta-row{
-      display:flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items:center;
-      margin-top: 10px;
-    }
-
-    .hero-aside{
-      display:flex;
-      flex-direction:column;
-      gap: 14px;
-    }
-    .mini{
-      padding: 16px;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(10,11,16,.40);
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow2);
-    }
-    .mini h3{ margin:0 0 8px 0; font-size: 15px; }
-    .mini p{ margin:0; color: var(--muted); font-size: 13px; }
-    .tagline{
-      display:flex; flex-wrap:wrap; gap: 10px; margin-top: 10px;
-    }
+    .tagline{ display:flex; flex-wrap:wrap; gap: 10px; margin-top: 10px; }
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       padding: 8px 10px;
@@ -388,32 +272,17 @@
     }
     .pill .r{ background: rgba(225,6,0,.85); box-shadow: 0 0 0 6px rgba(225,6,0,.12); }
 
-    /* Tables */
-    .table-wrap{ overflow:auto; }
-    table{
-      width:100%;
-      border-collapse: collapse;
-      min-width: 860px;
+    .hero .cta-row{ display:flex; gap: 12px; flex-wrap: wrap; align-items:center; margin-top: 12px; }
+    .mini{
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(10,11,16,.40);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow2);
     }
-    th, td{
-      text-align:left;
-      padding: 12px 12px;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      vertical-align: top;
-      font-size: 13px;
-    }
-    th{
-      position:sticky;
-      top:0;
-      background: rgba(15,17,24,.92);
-      backdrop-filter: blur(8px);
-      z-index:2;
-      color: var(--metal);
-      letter-spacing:.06em;
-      text-transform: uppercase;
-      font-size: 11px;
-    }
-    td .small{ display:block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .mini h3{ margin:0 0 8px 0; font-size: 15px; }
+    .mini p{ margin:0; color: var(--muted); font-size: 13px; }
     .badge{
       display:inline-flex; align-items:center; gap:8px;
       padding: 6px 10px;
@@ -427,33 +296,69 @@
     .badge.warn{ border-color: rgba(255,204,0,.24); background: rgba(255,204,0,.10); color: #fff0b3;}
     .badge.red{ border-color: rgba(225,6,0,.30); background: rgba(225,6,0,.12); color: #ffd1d1;}
 
-    .link{
-      color:#fff;
-      text-decoration: underline;
-      text-decoration-color: rgba(225,6,0,.7);
-      text-underline-offset: 3px;
+    /* blocks */
+    .section-head{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap: 14px; margin-bottom: 18px;
     }
-    .mono{ font-family: var(--mono); }
+    .section-head h2{ margin:0; font-size: 22px; letter-spacing:.02em; }
+    .section-head p{ margin:0; color: var(--muted); max-width: 70ch; font-size: 13px; }
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .panel .inner{ padding: 16px; }
 
-    /* Filters */
-    .controls{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom: 12px;
+    .grid{ display:grid; gap: 14px; }
+    .grid.cols-2{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.cols-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    /* feature cards */
+    .card{
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      padding: 14px;
     }
-    .controls .left, .controls .right{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .field{
-      display:flex; flex-direction:column; gap:6px;
-      min-width: 200px;
+    .card b{ display:block; font-size: 14px; }
+    .card p{ margin: 8px 0 0 0; color: var(--muted); font-size: 13px; }
+
+    /* pricing */
+    .price-grid{ display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .price{
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      padding: 16px;
+      display:flex; flex-direction:column; gap: 10px;
+      position:relative;
+      overflow:hidden;
     }
-    .field label{
-      color: var(--muted);
+    .price.featured{
+      border-color: rgba(225,6,0,.35);
+      background: linear-gradient(135deg, rgba(225,6,0,.12), rgba(255,255,255,.03));
+      box-shadow: 0 18px 40px rgba(225,6,0,.10);
+    }
+    .price .tier{ font-weight:900; letter-spacing:.08em; text-transform:uppercase; font-size:12px; color:#fff; }
+    .price .money{ font-family: var(--mono); font-size: 28px; font-weight: 900; }
+    .price ul{ margin:0; padding-left: 18px; color: var(--muted); font-size: 13px; }
+    .price li{ margin: 6px 0; }
+    .price .tag{
+      position:absolute; top: 14px; right: 14px;
+      padding: 6px 10px; border-radius: 999px;
+      border: 1px solid rgba(225,6,0,.30);
+      background: rgba(225,6,0,.14);
+      font-family: var(--mono);
       font-size: 12px;
-      letter-spacing:.02em;
+      letter-spacing:.06em;
     }
+
+    /* forms */
+    .field{ display:flex; flex-direction:column; gap:6px; }
+    .field label{ color: var(--muted); font-size: 12px; letter-spacing:.02em; }
     .input, select, textarea{
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.03);
@@ -462,356 +367,29 @@
       outline:none;
       transition: border-color .15s ease, background .15s ease;
     }
-    select{ padding-right: 34px; }
     .input:hover, select:hover, textarea:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.04); }
-    textarea{ min-height: 96px; resize: vertical; }
-/* ===== Racing Timer HUD (completo) ===== */
-.timer.racing{
-  position: relative;
-  display:flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 10px;
+    textarea{ min-height: 110px; resize: vertical; }
 
-  padding: 14px 14px;
-  border-radius: 18px;
-  border: 1px solid rgba(225,6,0,.35);
-  background:
-    radial-gradient(800px 120px at 20% 0%, rgba(225,6,0,.22), transparent 60%),
-    linear-gradient(135deg, rgba(225,6,0,.18), rgba(255,255,255,.03));
-  box-shadow:
-    0 18px 40px rgba(225,6,0,.10),
-    inset 0 0 0 1px rgba(255,255,255,.04);
-  overflow:hidden;
-  font-family: var(--mono);
-  letter-spacing:.06em;
-}
-
-.timer.racing::after{
-  content:"";
-  position:absolute; inset:0;
-  pointer-events:none;
-  background: repeating-linear-gradient(
-    180deg,
-    rgba(255,255,255,.05) 0,
-    rgba(255,255,255,.05) 1px,
-    transparent 1px,
-    transparent 4px
-  );
-  opacity:.06;
-  mix-blend-mode: overlay;
-}
-
-/* T- capsule */
-.timer.racing .tminus{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.18);
-  font-size: 12px;
-  letter-spacing:.14em;
-  text-transform: uppercase;
-  opacity: .95;
-}
-
-/* DD wrapper para esconder quando dd=0 */
-.timer.racing .ddwrap{
-  display:inline-flex;
-  align-items:baseline;
-  gap: 6px;
-}
-
-.timer.racing .dd{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-width: 44px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.18);
-  font-size: 12px;
-  color: rgba(255,255,255,.78);
-}
-
-/* números principais */
-.timer.racing .hh,
-.timer.racing .mm,
-.timer.racing .ss{
-  font-weight: 950;
-  font-size: 28px;
-  color: #fff;
-  letter-spacing:.10em;
-  text-shadow: 0 0 18px rgba(225,6,0,.35);
-}
-
-.timer.racing .sep{
-  font-weight: 900;
-  font-size: 22px;
-  opacity:.35;
-  transform: translateY(-1px);
-}
-
-/* barra “telemetria” */
-.progress-wrap{
-  margin-top: 10px;
-  height: 8px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.08);
-  background: rgba(0,0,0,.28);
-  overflow:hidden;
-}
-
-.progress{
-  position: relative;
-  height:100%;
-  width: 0%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(225,6,0,.85), rgba(255,42,34,.45));
-  box-shadow:
-    0 10px 24px rgba(225,6,0,.12),
-    inset 0 0 0 1px rgba(255,255,255,.06);
-  transition: width .25s ease;
-}
-
-/* brilho e “end cap” */
-.progress::after{
-  content:"";
-  position:absolute;
-  right: -10px;
-  top: 50%;
-  width: 18px;
-  height: 18px;
-  transform: translateY(-50%);
-  border-radius: 999px;
-  background: rgba(255,255,255,.18);
-  filter: blur(6px);
-  opacity: .65;
-}
-
-/* estado urgente */
-.timer.racing.urgent{
-  border-color: rgba(255,204,0,.35);
-  background:
-    radial-gradient(800px 120px at 20% 0%, rgba(255,204,0,.20), transparent 60%),
-    linear-gradient(135deg, rgba(255,204,0,.12), rgba(255,255,255,.03));
-  box-shadow:
-    0 18px 40px rgba(255,204,0,.10),
-    inset 0 0 0 1px rgba(255,255,255,.04);
-}
-
-.timer.racing.urgent .hh,
-.timer.racing.urgent .mm,
-.timer.racing.urgent .ss{
-  text-shadow: 0 0 18px rgba(255,204,0,.25);
-}
-
-/* estado live */
-.timer.racing.live{
-  border-color: rgba(35,196,131,.35);
-  background:
-    radial-gradient(800px 120px at 20% 0%, rgba(35,196,131,.22), transparent 60%),
-    linear-gradient(135deg, rgba(35,196,131,.12), rgba(255,255,255,.03));
-}
-
-.timer.racing.live .hh,
-.timer.racing.live .mm,
-.timer.racing.live .ss{
-  text-shadow: 0 0 18px rgba(35,196,131,.35);
-}
-
-
-
-   /* ===== TREINOS (v2) — cards horizontais, legíveis ===== */
-.week{
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(220px, 1fr);
-  gap: 12px;
-
-  overflow-x: auto;
-  padding-bottom: 10px;
-  scroll-snap-type: x mandatory;
-
-  /* deixa o scroll mais “clean” */
-  scrollbar-width: thin;
-}
-.week::-webkit-scrollbar{ height: 10px; }
-.week::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,.10);
-  border-radius: 999px;
-}
-.week::-webkit-scrollbar-track{
-  background: rgba(0,0,0,.10);
-  border-radius: 999px;
-}
-
-.day{
-  scroll-snap-align: start;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.08);
-  background: rgba(255,255,255,.03);
-  padding: 12px;
-
-  min-height: 0; /* remove altura forçada */
-}
-
-.day-head{
-  display:flex;
-  align-items:baseline;
-  justify-content:space-between;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.day-head h4{
-  margin:0;
-  font-size: 12px;
-  letter-spacing:.10em;
-  text-transform: uppercase;
-  color: var(--metal);
-}
-.day-head .time{
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--muted);
-}
-
-/* Card interno mais leve */
-.slot{
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.08);
-  background: rgba(0,0,0,.16);
-  padding: 10px;
-  margin: 0;
-}
-.slot b{
-  display:block;
-  font-size: 14px;
-}
-.slot ul{
-  margin: 8px 0 0 18px;
-  padding: 0;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.35;
-}
-.slot small{
-  display:block;
-  color: var(--muted);
-  margin-top: 6px;
-  font-size: 12px;
-}
-
-/* CTA único por dia */
-.day .btn.tiny{
-  width: 100%;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-/* Destaque do próximo treino */
-.day.next{
-  border-color: rgba(35,196,131,.30);
-  background: linear-gradient(135deg, rgba(35,196,131,.10), rgba(255,255,255,.02));
-}
-.day.next .slot{
-  border-color: rgba(35,196,131,.22);
-}
-
-
-    /* Results */
-    .nowrap{ white-space:nowrap; }
-    .mini-badges{ display:flex; gap:8px; flex-wrap:wrap; }
-
-    /* KPI cards */
-    .kpis{
-      display:grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 12px;
+    /* toast */
+    .toast{
+      position:fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 20px;
+      z-index: 2100;
+      min-width: min(560px, calc(100% - 24px));
+      display:none;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(15,17,24,.92);
+      box-shadow: var(--shadow2);
+      color: #fff;
     }
-    .kpi{
-      padding: 14px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-    }
-    .kpi .label{
-      color: var(--muted);
-      font-size: 12px;
-      letter-spacing:.08em;
-      text-transform: uppercase;
-    }
-    .kpi .value{
-      margin-top: 8px;
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing:.01em;
-    }
-    .kpi .hint{
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 12px;
-    }
+    .toast.show{ display:block; }
+    .toast small{ color: var(--muted); display:block; margin-top: 4px; }
 
-    .canvas-wrap{
-      padding: 14px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.02);
-    }
-    canvas{
-      width:100%;
-      height: 220px;
-      display:block;
-    }
-
-    /* Pilots */
-    .pilot-grid{
-      display:grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-    }
-    .pilot{
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-      overflow:hidden;
-      cursor:pointer;
-      transition: transform .15s ease, border-color .15s ease, background .15s ease;
-    }
-    .pilot:hover{
-      transform: translateY(-2px);
-      border-color: rgba(225,6,0,.25);
-      background: rgba(255,255,255,.04);
-    }
-    .ph{
-      height: 120px;
-      background:
-        radial-gradient(220px 120px at 30% 30%, rgba(225,6,0,.28), transparent 70%),
-        linear-gradient(135deg, rgba(255,255,255,.06), rgba(0,0,0,.20)),
-        repeating-linear-gradient(120deg, rgba(255,255,255,.06) 0, rgba(255,255,255,.06) 1px, transparent 1px, transparent 10px);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      display:grid; place-items:center;
-    }
-    .ph span{
-      font-family: var(--mono);
-      font-size: 12px;
-      color: rgba(255,255,255,.75);
-      letter-spacing:.12em;
-      text-transform: uppercase;
-    }
-    .pilot .meta{ padding: 12px; }
-    .pilot .meta b{ display:block; font-size: 14px; }
-    .pilot .meta small{ display:block; color: var(--muted); margin-top: 2px; }
-    .pilot .meta .row{
-      margin-top: 10px;
-      display:flex; gap: 10px; flex-wrap:wrap;
-    }
-
-    /* Modal */
+    /* modal */
     .modal{
       position:fixed; inset:0;
       background: rgba(0,0,0,.66);
@@ -823,7 +401,7 @@
     }
     .modal.open{ display:flex; }
     .modal-card{
-      width: min(860px, 100%);
+      width: min(560px, 100%);
       border-radius: 22px;
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(15,17,24,.92);
@@ -831,29 +409,11 @@
       overflow:hidden;
     }
     .modal-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
+      display:flex; justify-content:space-between; align-items:center;
       padding: 14px 14px 10px 14px;
       border-bottom: 1px solid rgba(255,255,255,.08);
     }
     .modal-head b{ font-size: 14px; letter-spacing:.06em; text-transform:uppercase; color:#fff; }
-    .modal-body{ padding: 14px; display:grid; grid-template-columns: 1fr 1.2fr; gap: 14px; }
-    .modal-body p{ margin: 0; color: var(--muted); font-size: 13px; }
-    .kv{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .kv .k{
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-      padding: 10px;
-    }
-    .kv .k span{ display:block; color: var(--muted); font-size: 12px; }
-    .kv .k b{ display:block; margin-top:6px; }
     .close-x{
       width:44px; height:44px;
       border-radius: 14px;
@@ -861,250 +421,74 @@
       background: rgba(255,255,255,.03);
       cursor:pointer;
     }
-
-    /* Streaming */
-    .status{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-    }
-    .lamp{
-      width: 10px; height: 10px; border-radius: 999px;
-      background: rgba(255,255,255,.12);
-      box-shadow: 0 0 0 6px rgba(255,255,255,.06);
-    }
-    .lamp.on{ background: rgba(35,196,131,.9); box-shadow: 0 0 0 6px rgba(35,196,131,.14); }
-    .embed{
-      width:100%;
-      aspect-ratio: 16/9;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.22);
-      overflow:hidden;
-    }
-    .embed iframe{ width:100%; height:100%; border:0; }
-    .overlay-preview{
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: radial-gradient(600px 240px at 20% 20%, rgba(225,6,0,.16), transparent 55%),
-                  linear-gradient(135deg, rgba(255,255,255,.05), rgba(0,0,0,.18));
-      padding: 14px;
-      min-height: 180px;
-      position:relative;
-      overflow:hidden;
-    }
-    .overlay-chip{
-      position:absolute;
-      top: 14px; right: 14px;
-      display:none;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(225,6,0,.30);
-      background: rgba(225,6,0,.14);
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing:.06em;
-    }
-    .overlay-preview .mock{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .mock .box{
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.14);
-      padding: 10px;
-      min-height: 62px;
-    }
-    .mock .box b{ display:block; font-size: 12px; letter-spacing:.08em; text-transform:uppercase; color: var(--metal); }
-    .mock .box span{ display:block; margin-top: 6px; font-family: var(--mono); color: #fff; opacity:.9; }
-
-    /* Widgets */
-    .widget{
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-      padding: 14px;
-    }
-    .widget h3{ margin:0 0 10px 0; font-size: 15px; }
-    .widget p{ margin:0; color: var(--muted); font-size: 13px; }
-    .checklist{
-      display:grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .check{
-      display:flex; align-items:center; gap:10px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.14);
-      padding: 10px;
-    }
-    .check input{
-      width: 18px; height: 18px;
-      accent-color: var(--red);
-    }
-    .planner{
-      display:grid;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .planner .row{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-    }
-    .planner .out{
-      padding: 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(225,6,0,.25);
-      background: linear-gradient(135deg, rgba(225,6,0,.12), rgba(255,255,255,.03));
-      font-family: var(--mono);
-      letter-spacing:.04em;
-    }
-
-    /* Recrutamento */
-    form .grid{ margin-top: 12px; }
+    .modal-body{ padding: 14px; display:grid; gap: 12px; }
     .help{ color: var(--muted); font-size: 12px; margin-top: 6px; }
 
-    /* Loja */
-    .products{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
+    /* ADMIN */
+    .route{ display:none; }
+    .route.active{ display:block; }
+    .admin-shell{ padding-top: calc(var(--navH) + 18px); padding-bottom: 26px; }
+    .admin-top{
+      display:flex; justify-content:space-between; align-items:flex-start;
+      gap: 14px; flex-wrap:wrap;
+      margin: 18px 0;
     }
-    .product{
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
+    .admin-top h1{
+      margin:0; font-size: 22px; letter-spacing:.02em;
     }
-    .product .img{
-      height: 140px;
-      background:
-        radial-gradient(220px 120px at 35% 35%, rgba(225,6,0,.22), transparent 70%),
-        linear-gradient(135deg, rgba(255,255,255,.06), rgba(0,0,0,.22)),
-        repeating-linear-gradient(120deg, rgba(255,255,255,.06) 0, rgba(255,255,255,.06) 1px, transparent 1px, transparent 10px);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      display:grid; place-items:center;
-      color: rgba(255,255,255,.75);
-      font-family: var(--mono);
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      font-size: 12px;
-    }
-    .product .body{ padding: 12px; display:flex; flex-direction:column; gap: 8px; flex: 1 1 auto; }
-    .price{ font-family: var(--mono); color: #fff; }
-    .cart{
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-      padding: 14px;
-    }
-    .cart ul{ list-style:none; padding:0; margin: 0; display:grid; gap: 10px; }
-    .cart li{
-      display:flex; justify-content:space-between; align-items:center; gap: 10px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.14);
-      padding: 10px;
-    }
-    .qty{
-      display:inline-flex; align-items:center; gap:8px;
-      font-family: var(--mono);
-      color:#fff;
-    }
-    .subtotal{
-      margin-top: 12px;
-      display:flex; justify-content:space-between; align-items:center;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255,255,255,.08);
-      font-family: var(--mono);
-    }
-
-    /* Footer */
-    footer{
-      padding: 26px 16px 96px;
-      border-top: 1px solid rgba(255,255,255,.08);
-      background: rgba(0,0,0,.15);
-    }
-    footer .foot{
-      max-width: var(--max);
-      margin:0 auto;
-      display:flex;
-      flex-wrap:wrap;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap: 16px;
-    }
-    footer small{ color: var(--muted); display:block; }
-    .social{
+    .admin-top p{ margin:6px 0 0 0; color: var(--muted); font-size: 13px; }
+    .tabs{
       display:flex; gap: 10px; flex-wrap:wrap;
+      margin: 12px 0 0 0;
+    }
+    .tab{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      cursor:pointer;
+      font-size: 13px;
+    }
+    .tab.active{
+      color:#fff;
+      border-color: rgba(225,6,0,.35);
+      background: linear-gradient(135deg, rgba(225,6,0,.16), rgba(255,255,255,.03));
     }
 
-    /* Floating Discord */
-    .floating{
-      position:fixed;
-      right: 16px;
-      bottom: 16px;
-      z-index: 1500;
-      display:flex;
-      gap: 10px;
-      align-items:center;
+    table{ width:100%; border-collapse: collapse; }
+    th, td{
+      text-align:left;
+      padding: 12px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      vertical-align: top;
+      font-size: 13px;
     }
-    .float-btn{
-      display:inline-flex;
-      align-items:center;
-      gap: 10px;
-      padding: 12px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(225,6,0,.40);
-      background: linear-gradient(135deg, rgba(225,6,0,.92), rgba(255,42,34,.50));
-      box-shadow: 0 16px 34px rgba(225,6,0,.22);
-      font-weight: 800;
-      letter-spacing:.02em;
+    th{
+      position:sticky; top:0;
+      background: rgba(15,17,24,.92);
+      backdrop-filter: blur(8px);
+      z-index:2;
+      color: rgba(184,192,212,.95);
+      letter-spacing:.06em;
+      text-transform: uppercase;
+      font-size: 11px;
     }
-    .float-btn:hover{ transform: translateY(-1px); }
-    .float-btn:active{ transform: translateY(0); }
+    .table-wrap{ overflow:auto; border-radius: 16px; border:1px solid rgba(255,255,255,.08); }
 
-    /* Scroll reveal */
-    .reveal{ opacity:0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease; }
-    .reveal.in{ opacity:1; transform: translateY(0); }
-
-    /* Responsive */
-    @media (max-width: 1100px){
-      .nav-actions{ min-width: 210px; }
-      .kpis{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .pilot-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .products{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      table{ min-width: 980px; }
-    }
-    @media (max-width: 880px){
+    /* mobile */
+    @media (max-width: 980px){
       .hero-grid{ grid-template-columns: 1fr; }
+      .nav-actions{ min-width: auto; }
+      .price-grid{ grid-template-columns: 1fr; }
+      .grid.cols-2{ grid-template-columns: 1fr; }
       nav.primary{ display:none; }
       .hamburger{ display:grid; }
-      .nav-actions{ min-width: auto; }
-      .week{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .pilot-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .modal-body{ grid-template-columns: 1fr; }
-    }
-    @media (max-width: 520px){
-      .brand{ min-width: auto; }
-      .brand-title span{ display:none; }
-      .hero h1{ font-size: 34px; }
-      .kpis{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .products{ grid-template-columns: 1fr; }
-      .controls .left, .controls .right{ width:100%; }
-      .field{ min-width: 100%; }
-      .floating{ right: 12px; bottom: 12px; }
     }
 
-    /* Mobile drawer */
+    /* drawer */
     .drawer{
-      position:fixed; inset:0;
-      z-index: 1900;
+      position:fixed; inset:0; z-index: 1900;
       display:none;
       background: rgba(0,0,0,.62);
       padding: 18px;
@@ -1138,23 +522,11 @@
       color: var(--muted);
     }
     .drawer .links a:hover{ color:#fff; border-color: rgba(225,6,0,.22); }
-    .toast{
-      position:fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 88px;
-      z-index: 2100;
-      min-width: min(560px, calc(100% - 24px));
-      display:none;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(15,17,24,.92);
-      box-shadow: var(--shadow2);
-      color: #fff;
-    }
-    .toast.show{ display:block; }
-    .toast small{ color: var(--muted); display:block; margin-top: 4px; }
+
+    /* small helpers */
+    .mono{ font-family: var(--mono); }
+    .muted{ color: var(--muted); }
+    .split{ display:flex; gap: 12px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
   </style>
 </head>
 
@@ -1164,9 +536,8 @@
   <!-- NAV -->
   <header class="navbar" role="banner">
     <div class="nav-wrap">
-      <a class="brand" href="#inicio" aria-label="Ir para a secção Início">
-        <div class="logo" aria-hidden="true" title="DOWNFORCE MAFIA">
-          <!-- Simple placeholder SVG "DFM" monogram -->
+      <a class="brand" href="#home" aria-label="Go to Home">
+        <div class="logo" aria-hidden="true" title="Downforce Mafia">
           <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M10 44V20h14c9 0 14 4 14 12s-5 12-14 12H10Z" stroke="white" stroke-width="4" opacity="0.92"/>
             <path d="M42 44V20h12" stroke="white" stroke-width="4" opacity="0.85"/>
@@ -1176,41 +547,33 @@
         </div>
         <div class="brand-title">
           <strong>DOWNFORCE MAFIA</strong>
-          <span>iRacing Team • Clean Racing • Real Pace</span>
+          <span>Micro-SaaS for iRacing Teams</span>
         </div>
       </a>
 
-      <nav class="primary" aria-label="Menu principal">
+      <nav class="primary" aria-label="Primary">
         <div class="nav-links" id="navLinks">
-          <a href="#inicio" data-target="inicio">Início</a>
-          <a href="#calendario" data-target="calendario">Calendário</a>
-          <a href="#treinos" data-target="treinos">Treinos</a>
-          <a href="#resultados" data-target="resultados">Resultados</a>
-          <a href="#pilotos" data-target="pilotos">Pilotos</a>
-          <a href="#stats" data-target="stats">Stats</a>
-          <a href="#streaming" data-target="streaming">Streaming</a>
-          <a href="#loja" data-target="loja">Loja</a>
-          <a href="#recrutamento" data-target="recrutamento">Recrutamento</a>
-          <a href="#contactos" data-target="contactos">Contactos</a>
-          <a href="https://discord.gg/SEU_LINK" target="_blank" rel="noopener" aria-label="Entrar no Discord (abre numa nova aba)">Discord</a>
+          <a href="#home" data-target="home">Home</a>
+          <a href="#features" data-target="features">Features</a>
+          <a href="#pricing" data-target="pricing">Pricing</a>
+          <a href="#faq" data-target="faq">FAQ</a>
+          <a href="#contact" data-target="contact">Contact</a>
+          <a href="#admin" data-target="admin" id="navAdmin" style="display:none;">Admin</a>
         </div>
       </nav>
 
       <div class="nav-actions">
-        <span class="chip" title="Foco da equipa"><b>IRACING</b> • PT-PT</span>
-        <a class="btn small ghost" href="https://discord.gg/SEU_LINK" target="_blank" rel="noopener" aria-label="Entrar no Discord (abre numa nova aba)">
-          Entrar no Discord
-        </a>
-        <button class="hamburger" id="openDrawer" aria-label="Abrir menu">
-          <span aria-hidden="true"></span>
-        </button>
+        <span class="chip" title="Product focus"><b>TEAM</b> • admin-ready</span>
+        <button class="btn small ghost" id="btnLogin">Admin Login</button>
+        <button class="btn small danger" id="btnLogout" style="display:none;">Logout</button>
+        <button class="hamburger" id="openDrawer" aria-label="Open menu"><span aria-hidden="true"></span></button>
       </div>
     </div>
   </header>
 
   <!-- Mobile Drawer -->
   <aside class="drawer" id="drawer" aria-hidden="true">
-    <div class="card" role="dialog" aria-label="Menu móvel">
+    <div class="card" role="dialog" aria-label="Mobile menu">
       <div class="top">
         <div style="display:flex;align-items:center;gap:10px;">
           <div class="logo" aria-hidden="true" style="width:40px;height:40px;border-radius:14px;">
@@ -1223,804 +586,495 @@
           </div>
           <div>
             <div style="font-weight:900;letter-spacing:.08em;font-size:12px;text-transform:uppercase;">DOWNFORCE MAFIA</div>
-            <div style="color:var(--muted);font-size:12px;font-family:var(--mono);">Clean Racing • Real Pace</div>
+            <div style="color:var(--muted);font-size:12px;font-family:var(--mono);">Micro-SaaS for teams</div>
           </div>
         </div>
-        <button class="close-x" id="closeDrawer" aria-label="Fechar menu">✕</button>
+        <button class="close-x" id="closeDrawer" aria-label="Close">✕</button>
       </div>
       <div class="links" id="drawerLinks">
-        <a href="#inicio">Início</a>
-        <a href="#calendario">Calendário</a>
-        <a href="#treinos">Treinos</a>
-        <a href="#resultados">Resultados</a>
-        <a href="#pilotos">Pilotos</a>
-        <a href="#stats">Stats</a>
-        <a href="#streaming">Streaming</a>
-        <a href="#loja">Loja</a>
-        <a href="#recrutamento">Recrutamento</a>
-        <a href="#contactos">Contactos</a>
-        <a href="https://discord.gg/SEU_LINK" target="_blank" rel="noopener">Entrar no Discord</a>
-        <a href="#recrutamento" class="btn primary" style="display:inline-flex;justify-content:center;">Junta-te à equipa</a>
+        <a href="#home">Home</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+        <a href="#admin" id="drawerAdmin" style="display:none;">Admin</a>
+        <button class="btn primary" id="drawerLogin" style="display:inline-flex;justify-content:center;">Admin Login</button>
+        <button class="btn danger" id="drawerLogout" style="display:none;justify-content:center;">Logout</button>
       </div>
     </div>
   </aside>
 
+  <!-- TOAST -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <!-- LOGIN MODAL -->
+  <div class="modal" id="loginModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-label="Admin login">
+      <div class="modal-head">
+        <b>Team Admin Login</b>
+        <button class="close-x" id="closeLogin" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="badge red">Demo only: client-side session</div>
+
+        <div class="grid cols-2">
+          <div class="field">
+            <label for="loginEmail">Email</label>
+            <input class="input" id="loginEmail" type="email" placeholder="admin@team.com" autocomplete="username" required />
+          </div>
+          <div class="field">
+            <label for="loginOrg">Team / Org</label>
+            <input class="input" id="loginOrg" type="text" placeholder="Downforce Mafia" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="loginPass">Password</label>
+          <input class="input" id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password" required />
+          <div class="help">Wire this to your backend (JWT/session). For now it accepts any non-empty values.</div>
+        </div>
+
+        <div class="split">
+          <button class="btn primary" id="doLogin">Login ➜</button>
+          <button class="btn ghost" id="demoFill">Use demo credentials</button>
+        </div>
+        <div class="help">Tip: after login, open <span class="mono">#admin</span>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUTES -->
   <main>
-    <!-- HERO / INÍCIO -->
-    <section id="inicio" class="hero">
-      <div class="container hero-grid">
-        <div class="hero-card reveal">
-          <div class="kicker"><span class="dot" aria-hidden="true"></span> iRacing Team • Clean Racing • Real Pace</div>
-          <h1>DOWNFORCE <span class="accent">MAFIA</span></h1>
-          <p class="sub">
-            Uma equipa focada em iRacing com mentalidade de corrida real: consistência, respeito em pista e ritmo limpo.
-            Junta-te para treinos estruturados, briefings claros e uma comunidade que joga “hard” mas corre “clean”.
-          </p>
-
-          <div class="tagline" aria-label="Destaques rápidos">
-            <span class="pill"><i class="r" aria-hidden="true"></i> Sprint & Endurance</span>
-            <span class="pill"><i aria-hidden="true"></i> Setups & Debrief</span>
-            <span class="pill"><i aria-hidden="true"></i> Coaching interno</span>
-            <span class="pill"><i aria-hidden="true"></i> Streaming & Overlays</span>
-          </div>
-
-          <div class="cta-row">
-            <a class="btn primary" href="#recrutamento" aria-label="Ir para Recrutamento">
-              Junta-te à equipa
-              <span aria-hidden="true">➜</span>
-            </a>
-            <a class="btn ghost" href="https://discord.gg/SEU_LINK" target="_blank" rel="noopener" aria-label="Entrar no Discord (abre numa nova aba)">
-              Entrar no Discord
-              <span aria-hidden="true">↗</span>
-            </a>
-            <button class="btn" id="btnQuickReveal" aria-label="Mostrar destaques da plataforma">
-              Ver dashboard
-              <span aria-hidden="true">⚡</span>
-            </button>
-          </div>
-
-          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-            <span class="badge red"><span aria-hidden="true">⛽</span> Estratégia (mock)</span>
-            <span class="badge"><span aria-hidden="true">🌦️</span> Condições de pista (mock)</span>
-            <span class="badge good"><span aria-hidden="true">🛡️</span> Clean Racing</span>
-          </div>
-        </div>
-
-        <div class="hero-aside">
-          <div class="mini reveal">
-            <h3>Próxima sessão</h3>
-            <p id="nextSessionText">A calcular…</p>
-            <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
-              <a class="btn tiny primary" href="#treinos">Ver treinos</a>
-              <button class="btn tiny" id="btnRememberNext">Lembrar-me</button>
-            </div>
-          </div>
-
-          <div class="mini reveal">
-            <h3>Estado do Discord</h3>
-            <p>Centro de briefings, setups e convocatórias. Entra e apresenta-te!</p>
-            <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
-              <a class="btn tiny ghost" href="https://discord.gg/SEU_LINK" target="_blank" rel="noopener" aria-label="Entrar no Discord (abre numa nova aba)">Entrar no Discord ↗</a>
-              <a class="btn tiny" href="#contactos">Contactos</a>
-            </div>
-          </div>
-
-          <div class="mini reveal">
-            <h3>Preferências</h3>
-            <p>Guarda filtros e estado (checklist/carrinho) em <span class="mono">localStorage</span>.</p>
-            <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
-              <button class="btn tiny" id="btnResetPrefs">Repor preferências</button>
-              <button class="btn tiny ghost" id="btnToggleTheme" aria-label="Alternar tema (opcional)">Tema (opcional)</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CALENDÁRIO -->
-    <section id="calendario">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h2>Calendário de Corridas (iRacing)</h2>
-            <p>Próximas provas (Europe/Lisbon). Filtra por Série e Carro e adiciona eventos ao teu calendário (.ics).</p>
-          </div>
-          <div class="mini-badges">
-            <span class="badge"><span aria-hidden="true">🗓️</span> 8–12 provas</span>
-            <span class="badge red"><span aria-hidden="true">⏱️</span> Horário PT</span>
-          </div>
-        </div>
-
-        <div class="panel reveal">
-          <div class="inner">
-            <div class="controls" aria-label="Filtros do calendário">
-              <div class="left">
-                <div class="field">
-                  <label for="filterSerie">Filtrar por Série</label>
-                  <select id="filterSerie" aria-label="Filtro por Série"></select>
-                </div>
-                <div class="field">
-                  <label for="filterCar">Filtrar por Carro</label>
-                  <select id="filterCar" aria-label="Filtro por Carro"></select>
-                </div>
-              </div>
-              <div class="right">
-                <span class="badge"><span aria-hidden="true">🔗</span> Setup: placeholder</span>
-                <span class="badge"><span aria-hidden="true">📝</span> Briefing: interno</span>
-              </div>
-            </div>
-
-            <div class="table-wrap" aria-label="Tabela de corridas">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Data</th>
-                    <th>Hora (Lisboa)</th>
-                    <th>Série</th>
-                    <th>Pista</th>
-                    <th>Carro</th>
-                    <th>Formato</th>
-                    <th>Setup</th>
-                    <th>Briefing</th>
-                    <th class="nowrap">Calendário</th>
-                  </tr>
-                </thead>
-                <tbody id="racesTbody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TREINOS -->
-    <section id="treinos">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h2>Treinos</h2>
-            <p>Calendário semanal (Seg–Dom), lembretes (notificação local se permitido) e “Treino aberto” com contagem decrescente.</p>
-          </div>
-          <div class="mini-badges">
-            <span class="badge good"><span aria-hidden="true">🟢</span> Treino aberto</span>
-            <span class="badge"><span aria-hidden="true">🔔</span> Lembretes</span>
-          </div>
-        </div>
-
-        <div class="grid cols-2">
-          <div class="panel reveal">
-            <div class="inner">
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
-                <b>Próximos treinos</b>
-                <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                  <button class="btn tiny" id="btnRememberAll">Lembrar-me do próximo treino</button>
-                  <button class="btn tiny ghost" id="btnNotifTest">Testar notificações</button>
-                </div>
-              </div>
-              <div class="week" id="weekGrid" aria-label="Calendário semanal de treinos"></div>
-            </div>
-          </div>
-
-          <div class="panel reveal">
-            <div class="inner countdown" aria-label="Treino aberto com contagem decrescente">
-              <b>Treino aberto</b>
-              <div class="timer racing" id="openTrainingTimer" aria-label="Contagem até ao próximo open practice">
-  <span class="tminus">T-</span>
-
-  <span class="ddwrap" id="opDDWrap">
-    <span class="dd" id="opDD">00</span><span class="sep ddsep" id="opDDSep">:</span>
-  </span>
-
-  <span class="hh" id="opHH">00</span><span class="sep">:</span>
-  <span class="mm" id="opMM">00</span><span class="sep">:</span>
-  <span class="ss" id="opSS">00</span>
-</div>
-
-<div class="progress-wrap" aria-hidden="true">
-  <div class="progress" id="openTrainingProg"></div>
-</div>
-
-
-<div class="progress-wrap" aria-hidden="true">
-  <div class="progress" id="openTrainingProg"></div>
-</div>
-
-              <div id="openTrainingInfo" class="badge red">A preparar…</div>
-
-              <div style="display:grid;gap:12px;margin-top:8px;">
-                <div class="widget">
-                  <h3>Regras rápidas</h3>
-                  <p>Respeitar espaço, sem divebombs, sem tilt. Objetivo: consistência e dados para o debrief.</p>
-                </div>
-                <div class="widget">
-                  <h3>Atalhos</h3>
-                  <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                    <a class="btn tiny primary" href="#resultados">Ver resultados</a>
-                    <a class="btn tiny ghost" href="https://discord.gg/SEU_LINK" target="_blank" rel="noopener">Discord ↗</a>
-                    <button class="btn tiny" id="btnScrollWidgets">Widgets Racing</button>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- RESULTADOS -->
-    <section id="resultados">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h2>Resultados</h2>
-            <p>Últimas 10 corridas com pesquisa por pista/piloto. Badges automáticos: Pódio e Pole.</p>
-          </div>
-          <div class="mini-badges">
-            <span class="badge"><span aria-hidden="true">🏁</span> Últimas 10</span>
-            <span class="badge"><span aria-hidden="true">🔎</span> Pesquisa</span>
-          </div>
-        </div>
-
-        <div class="panel reveal">
-          <div class="inner">
-            <div class="controls">
-              <div class="left">
-                <div class="field">
-                  <label for="resultsSearch">Pesquisar (pista ou piloto)</label>
-                  <input class="input" id="resultsSearch" type="text" placeholder="Ex: Spa / Miguel / Imola…" aria-label="Pesquisa de resultados">
-                </div>
-              </div>
-              <div class="right">
-                <span class="badge"><span aria-hidden="true">🏆</span> Pódio</span>
-                <span class="badge"><span aria-hidden="true">🎯</span> Pole</span>
-              </div>
-            </div>
-
-                        <div class="table-wrap" aria-label="Tabela de resultados">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Data</th>
-                    <th>Série</th>
-                    <th>Pista</th>
-                    <th>Carro</th>
-                    <th>Piloto</th>
-                    <th>Pos</th>
-                    <th class="nowrap">Quali</th>
-                    <th class="nowrap">Laps</th>
-                    <th class="nowrap">Inc</th>
-                    <th>Badges</th>
-                  </tr>
-                </thead>
-                <tbody id="resultsTbody"></tbody>
-              </table>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PILOTOS -->
-    <section id="pilotos">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h2>Pilotos</h2>
-            <p>Lista de pilotos com detalhes em modal (SR, iRating, especialidades, stats e notas internas).</p>
-          </div>
-          <div class="mini-badges">
-            <span class="badge"><span aria-hidden="true">🧑‍✈️</span> Roster</span>
-            <span class="badge good"><span aria-hidden="true">🛡️</span> Clean</span>
-          </div>
-        </div>
-
-        <div class="panel reveal">
-          <div class="inner">
-            <div class="controls" aria-label="Filtros de pilotos">
-              <div class="left">
-                <div class="field">
-                  <label for="pilotSearch">Pesquisar piloto</label>
-                  <input class="input" id="pilotSearch" type="text" placeholder="Nome / equipa / role…" aria-label="Pesquisa de pilotos">
-                </div>
-                <div class="field">
-                  <label for="pilotRole">Filtrar por role</label>
-                  <select id="pilotRole" aria-label="Filtro por role"></select>
-                </div>
-              </div>
-              <div class="right">
-                <span class="badge"><span aria-hidden="true">🪪</span> Modal</span>
-                <span class="badge"><span aria-hidden="true">📌</span> Notas</span>
-              </div>
-            </div>
-
-            <div class="pilot-grid" id="pilotGrid" aria-label="Grelha de pilotos"></div>
-
-            <p class="help">
-              Dica: clica num piloto para abrir o perfil completo. (Dados mock — liga ao teu backend/Google Sheet/JSON quando quiseres.)
+    <!-- LANDING -->
+    <div class="route active" id="routeLanding">
+      <section id="home" class="hero">
+        <div class="container hero-grid">
+          <div class="hero-card">
+            <div class="kicker"><span class="dot" aria-hidden="true"></span> Team Ops • Schedules • Results • Admin Tools</div>
+            <h1>Run your iRacing team like a <span class="accent">real outfit</span>.</h1>
+            <p class="sub">
+              One place for your calendar, training blocks, results, roster, and briefings.
+              Built for clean workflows: invite members, publish sessions, export .ics, track progress — and keep everything consistent.
             </p>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- STATS -->
-    <section id="stats">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h2>Stats</h2>
-            <p>KPIs rápidos (mock) + gráfico em canvas. Ideal para ligares ao iRacing API/exports quando estiveres pronto.</p>
-          </div>
-          <div class="mini-badges">
-            <span class="badge"><span aria-hidden="true">📈</span> KPIs</span>
-            <span class="badge red"><span aria-hidden="true">🧪</span> Mock</span>
-          </div>
-        </div>
+            <div class="tagline" aria-label="Highlights">
+              <span class="pill"><i class="r" aria-hidden="true"></i> Team calendar + .ics</span>
+              <span class="pill"><i aria-hidden="true"></i> Roster & roles</span>
+              <span class="pill"><i aria-hidden="true"></i> Results & KPIs</span>
+              <span class="pill"><i aria-hidden="true"></i> Admin dashboard</span>
+            </div>
 
-        <div class="grid cols-2">
-          <div class="panel reveal">
-            <div class="inner">
-              <div class="kpis" id="kpiGrid" aria-label="KPIs"></div>
-              <p class="help">Estes KPIs são gerados por JS com dados mock. Troca por dados reais quando ligares ao teu source.</p>
+            <div class="cta-row">
+              <a class="btn primary" href="#pricing">Start free trial <span aria-hidden="true">➜</span></a>
+              <button class="btn ghost" id="btnOpenLogin">Admin Login <span aria-hidden="true">↗</span></button>
+              <a class="btn" href="#features">See features <span aria-hidden="true">⚡</span></a>
+            </div>
+
+            <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+              <span class="badge good">🛡️ Clean ops</span>
+              <span class="badge">🗓️ Schedules</span>
+              <span class="badge red">⛽ Strategy notes</span>
+              <span class="badge">🧩 OBS overlays (optional)</span>
             </div>
           </div>
 
-          <div class="panel reveal">
-            <div class="inner">
-              <b>Ritmo / Consistência (mock)</b>
-              <div class="canvas-wrap" style="margin-top:10px;">
-                <canvas id="paceCanvas" width="1000" height="300" aria-label="Gráfico de ritmo em canvas"></canvas>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div class="mini">
+              <h3>What you get</h3>
+              <p>Admin panel to publish sessions, manage roster, and keep everyone aligned.</p>
+              <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
+                <a class="btn tiny primary" href="#features">Features</a>
+                <a class="btn tiny ghost" href="#pricing">Pricing</a>
               </div>
-              <p class="help">Canvas simples (sem libs). Dá para trocar por Chart.js se quiseres.</p>
+            </div>
+
+            <div class="mini">
+              <h3>Admin access</h3>
+              <p>Login as team administrator to manage your micro-SaaS workspace.</p>
+              <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="btn tiny primary" id="btnLogin2">Admin Login</button>
+                <a class="btn tiny ghost" href="#admin">Go to dashboard</a>
+              </div>
+            </div>
+
+            <div class="mini">
+              <h3>Works with your stack</h3>
+              <p>Hook into Discord webhooks, Google Sheets, or your own API. Keep it simple.</p>
+              <div class="help">This template is ready to be wired to Stripe + auth.</div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- STREAMING -->
-    <section id="streaming">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h2>Streaming</h2>
-            <p>Embed (Twitch/YouTube), estado ON/OFF (mock) e preview de overlay para OBS.</p>
-          </div>
-          <div class="mini-badges">
-            <span class="badge good"><span aria-hidden="true">🎥</span> Live</span>
-            <span class="badge"><span aria-hidden="true">🧩</span> Overlays</span>
-          </div>
-        </div>
-
-        <div class="grid cols-2">
-          <div class="panel reveal">
-            <div class="inner">
-              <div class="controls">
-                <div class="left status">
-                  <span class="lamp" id="liveLamp" aria-hidden="true"></span>
-                  <span class="badge" id="liveStatus">OFFLINE (mock)</span>
-                </div>
-                <div class="right">
-                  <button class="btn tiny" id="btnToggleLive">Alternar Live (mock)</button>
-                </div>
-              </div>
-
-              <div class="embed" aria-label="Embed de streaming">
-                <iframe
-                  id="streamFrame"
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                  title="Streaming embed"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowfullscreen
-                ></iframe>
-              </div>
-
-              <p class="help">Troca o link do iframe para Twitch/YouTube. Para Twitch, precisas do parâmetro <span class="mono">parent=</span>.</p>
+      <section id="features">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <h2>Features</h2>
+              <p>Everything you need to run sessions and keep the team consistent — without turning into spreadsheet hell.</p>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <span class="badge">⚙️ Configurable</span>
+              <span class="badge good">✅ Admin-friendly</span>
             </div>
           </div>
 
-          <div class="panel reveal">
+          <div class="panel">
             <div class="inner">
-              <b>Overlay preview (mock)</b>
-              <div class="overlay-preview" style="margin-top:10px;">
-                <div class="overlay-chip" id="overlayChip">DFM • LIVE</div>
-                <div style="font-weight:900;letter-spacing:.08em;text-transform:uppercase;">DOWNFORCE MAFIA</div>
-                <div style="color:var(--muted);font-size:12px;margin-top:4px;">Overlay layout (exemplo)</div>
-
-                <div class="mock">
-                  <div class="box">
-                    <b>Piloto</b>
-                    <span id="ovDriver">MIGUEL</span>
-                  </div>
-                  <div class="box">
-                    <b>P</b>
-                    <span id="ovPos">P05</span>
-                  </div>
-                  <div class="box">
-                    <b>Last</b>
-                    <span id="ovLast">1:48.921</span>
-                  </div>
-                  <div class="box">
-                    <b>Best</b>
-                    <span id="ovBest">1:48.102</span>
-                  </div>
+              <div class="grid cols-3">
+                <div class="card">
+                  <b>Team Calendar + .ics</b>
+                  <p>Publish races/trainings. Members add sessions to their calendar in one click.</p>
+                </div>
+                <div class="card">
+                  <b>Roster & Roles</b>
+                  <p>Core / Reserve / Trial / Academy — assign roles and keep access clean.</p>
+                </div>
+                <div class="card">
+                  <b>Results + KPIs</b>
+                  <p>Track incidents, podiums, iR trends and consistent pace in a lightweight dashboard.</p>
+                </div>
+                <div class="card">
+                  <b>Briefings & Notes</b>
+                  <p>Centralize event notes, pit plans, setup versions, and debrief action items.</p>
+                </div>
+                <div class="card">
+                  <b>Invite Members</b>
+                  <p>Invite by email, generate links, control permissions (Admin / Manager / Member).</p>
+                </div>
+                <div class="card">
+                  <b>Integrations</b>
+                  <p>Discord announcements, webhooks, exports. Keep the loop tight.</p>
                 </div>
               </div>
 
-              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
-                <button class="btn tiny primary" id="btnOverlayDemo">Demo overlay</button>
-                <button class="btn tiny ghost" id="btnCopyOverlay">Copiar JSON (mock)</button>
-              </div>
-
-              <p class="help">Isto é só preview. Se quiseres, faço-te um overlay HTML real para OBS Browser Source.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- LOJA -->
-    <section id="loja">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h2>Loja</h2>
-            <p>Merch mock com carrinho em <span class="mono">localStorage</span>. Sem pagamentos — apenas UI.</p>
-          </div>
-          <div class="mini-badges">
-            <span class="badge"><span aria-hidden="true">🛒</span> Carrinho</span>
-            <span class="badge red"><span aria-hidden="true">💳</span> Sem checkout</span>
-          </div>
-        </div>
-
-        <div class="grid cols-2">
-          <div class="panel reveal">
-            <div class="inner">
-              <div class="products" id="productsGrid" aria-label="Lista de produtos"></div>
-            </div>
-          </div>
-
-          <div class="panel reveal">
-            <div class="inner">
-              <div class="cart" aria-label="Carrinho">
-                <b>Carrinho</b>
-                <ul id="cartList" style="margin-top:10px;"></ul>
-                <div class="subtotal">
-                  <span>Subtotal</span>
-                  <span id="cartSubtotal">€0.00</span>
-                </div>
-                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
-                  <button class="btn tiny danger" id="btnClearCart">Limpar carrinho</button>
-                  <button class="btn tiny ghost" id="btnSaveCart">Guardar</button>
-                </div>
-                <p class="help">UI demo. Se quiseres checkout real: Stripe / Mollie (eu monto a arquitetura).</p>
+              <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+                <a class="btn primary" href="#pricing">See pricing ➜</a>
+                <button class="btn ghost" id="btnOpenLogin3">Admin Login ↗</button>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- RECRUTAMENTO -->
-    <section id="recrutamento">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h2>Recrutamento</h2>
-            <p>Formulário de candidatura (mock) com validação básica e envio “fake” (toast). Liga ao teu backend quando quiseres.</p>
+      <section id="pricing">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <h2>Pricing</h2>
+              <p>Simple tiers for teams of different sizes. Start small, upgrade when you need it.</p>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <span class="badge">💳 Stripe-ready</span>
+              <span class="badge red">🧪 Demo UI</span>
+            </div>
           </div>
-          <div class="mini-badges">
-            <span class="badge good"><span aria-hidden="true">✅</span> Clean mindset</span>
-            <span class="badge"><span aria-hidden="true">📝</span> Form</span>
-          </div>
-        </div>
 
-        <div class="panel reveal">
-          <div class="inner">
-            <form id="recruitForm" aria-label="Formulário de recrutamento">
-              <div class="grid cols-2">
-                <div class="field">
-                  <label for="rName">Nome / Nick</label>
-                  <input class="input" id="rName" type="text" placeholder="Ex: MiguelDFM" required>
-                </div>
-                <div class="field">
-                  <label for="rDiscord">Discord</label>
-                  <input class="input" id="rDiscord" type="text" placeholder="Ex: miguel#1234" required>
-                </div>
-                <div class="field">
-                  <label for="rIRating">iRating (aprox.)</label>
-                  <input class="input" id="rIRating" type="number" min="0" step="1" placeholder="Ex: 2100">
-                </div>
-                <div class="field">
-                  <label for="rSR">Safety Rating (aprox.)</label>
-                  <input class="input" id="rSR" type="text" placeholder="Ex: A 3.4">
-                </div>
-              </div>
-
-              <div class="grid cols-2">
-                <div class="field">
-                  <label for="rFocus">Foco</label>
-                  <select id="rFocus" aria-label="Foco">
-                    <option value="sprint">Sprint</option>
-                    <option value="endurance">Endurance</option>
-                    <option value="both" selected>Ambos</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <label for="rCar">Carro preferido</label>
-                  <input class="input" id="rCar" type="text" placeholder="Ex: GT3 / LMP2 / F4…">
-                </div>
-              </div>
-
-              <div class="field">
-                <label for="rMsg">Mensagem</label>
-                <textarea id="rMsg" placeholder="Conta-nos a tua experiência, horários e objetivos (clean racing!)."></textarea>
-                <div class="help">Isto não envia para lado nenhum (mock). Posso ligar a e-mail, webhook ou base de dados.</div>
-              </div>
-
-              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
-                <button class="btn primary" type="submit">Enviar candidatura ➜</button>
-                <button class="btn ghost" type="reset">Limpar</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-
-        <!-- CONTACTOS -->
-    <section id="contactos">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h2>Contactos</h2>
-            <p>Links rápidos e info de staff. (Substitui pelos teus contactos reais / redes / e-mail.)</p>
-          </div>
-          <div class="mini-badges">
-            <span class="badge"><span aria-hidden="true">💬</span> Discord</span>
-            <span class="badge"><span aria-hidden="true">📩</span> E-mail</span>
-          </div>
-        </div>
-
-        <div class="grid cols-2">
-          <div class="panel reveal">
+          <div class="panel">
             <div class="inner">
-              <b>Links</b>
-              <div style="display:grid;gap:10px;margin-top:12px;">
-                <a class="btn primary" href="https://discord.gg/SEU_LINK" target="_blank" rel="noopener">Discord (briefings) ↗</a>
-                <a class="btn ghost" href="#recrutamento">Candidatura</a>
-                <a class="btn" href="#streaming">Streaming / Overlays</a>
+              <div class="price-grid">
+                <div class="price">
+                  <div class="tier">Starter</div>
+                  <div class="money">€9<span class="muted">/mo</span></div>
+                  <div class="badge">Up to 10 members</div>
+                  <ul>
+                    <li>Calendar + .ics</li>
+                    <li>Roster & roles</li>
+                    <li>Basic results</li>
+                  </ul>
+                  <button class="btn primary" data-plan="starter">Start Starter</button>
+                </div>
+
+                <div class="price featured">
+                  <div class="tag">Most popular</div>
+                  <div class="tier">Pro</div>
+                  <div class="money">€19<span class="muted">/mo</span></div>
+                  <div class="badge good">Up to 30 members</div>
+                  <ul>
+                    <li>Everything in Starter</li>
+                    <li>KPIs + exports</li>
+                    <li>Discord integration</li>
+                    <li>Admin permissions</li>
+                  </ul>
+                  <button class="btn primary" data-plan="pro">Start Pro</button>
+                </div>
+
+                <div class="price">
+                  <div class="tier">Club</div>
+                  <div class="money">€39<span class="muted">/mo</span></div>
+                  <div class="badge">Unlimited members</div>
+                  <ul>
+                    <li>Everything in Pro</li>
+                    <li>Multiple teams / squads</li>
+                    <li>Advanced permissions</li>
+                    <li>Priority support</li>
+                  </ul>
+                  <button class="btn primary" data-plan="club">Start Club</button>
+                </div>
               </div>
 
-              <p class="help" style="margin-top:10px;">
-                Dica: mete aqui também o link para Google Calendar público, Sheets, ou o teu site principal.
+              <p class="help" style="margin-top:12px;">
+                These buttons currently open the login (demo). Replace with Stripe Checkout later.
               </p>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div class="panel reveal">
-            <div class="inner">
-              <b>Staff (mock)</b>
-              <div class="grid cols-2" style="margin-top:12px;">
-                <div class="widget">
-                  <h3>Team Lead</h3>
-                  <p><span class="mono">@DFM-Lead</span> • Briefings & Organização</p>
+      <section id="faq">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <h2>FAQ</h2>
+              <p>Quick answers before you commit. You can keep it lightweight or wire it to a full backend.</p>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <span class="badge">🔐 Auth</span>
+              <span class="badge">🧾 Billing</span>
+            </div>
+          </div>
+
+          <div class="grid cols-2">
+            <div class="panel">
+              <div class="inner">
+                <div class="card">
+                  <b>Do you provide real login/auth?</b>
+                  <p>This template is UI-only. Plug it into your auth (JWT/session/cookies) in the JS stubs.</p>
                 </div>
-                <div class="widget">
-                  <h3>Setups</h3>
-                  <p><span class="mono">@DFM-Setups</span> • Baselines / Ajustes</p>
-                </div>
-                <div class="widget">
-                  <h3>Coaching</h3>
-                  <p><span class="mono">@DFM-Coach</span> • Ritmo / Consistência</p>
-                </div>
-                <div class="widget">
-                  <h3>Media</h3>
-                  <p><span class="mono">@DFM-Media</span> • Clips / Overlays</p>
+                <div class="card" style="margin-top:12px;">
+                  <b>Is this only for iRacing?</b>
+                  <p>It’s optimized for iRacing teams, but can be adapted for any sim racing group or league.</p>
                 </div>
               </div>
+            </div>
 
-              <div style="margin-top:12px;">
-                <span class="badge"><span aria-hidden="true">📩</span> Email: <a class="link" href="mailto:team@downforcemafia.gg">team@downforcemafia.gg</a></span>
-                <span class="badge" style="margin-left:8px;"><span aria-hidden="true">🌍</span> Timezone: <span class="mono">Europe/Lisbon</span></span>
+            <div class="panel">
+              <div class="inner">
+                <div class="card">
+                  <b>Can it integrate with Discord?</b>
+                  <p>Yes. Add a webhook field and publish sessions automatically to your channels.</p>
+                </div>
+                <div class="card" style="margin-top:12px;">
+                  <b>Payments?</b>
+                  <p>Stripe / Mollie — straightforward. Replace the “Start plan” buttons with checkout sessions.</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- WIDGETS RACING (ancora para scroll) -->
-    <section id="widgets">
-      <div class="container">
-        <div class="section-head">
+          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+            <a class="btn primary" href="#contact">Talk to us ➜</a>
+            <button class="btn ghost" id="btnOpenLogin4">Admin Login ↗</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <h2>Contact</h2>
+              <p>Want this connected to your real data (iRacing exports/API, Discord, Sheets, billing)? Drop a message.</p>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <span class="badge">📩 Email</span>
+              <span class="badge">🧩 Integrations</span>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="inner">
+              <form id="contactForm">
+                <div class="grid cols-2">
+                  <div class="field">
+                    <label for="cName">Name</label>
+                    <input class="input" id="cName" type="text" placeholder="Your name" required />
+                  </div>
+                  <div class="field">
+                    <label for="cEmail">Email</label>
+                    <input class="input" id="cEmail" type="email" placeholder="you@email.com" required />
+                  </div>
+                </div>
+                <div class="field" style="margin-top:12px;">
+                  <label for="cMsg">Message</label>
+                  <textarea id="cMsg" placeholder="Tell us what you want to build..." required></textarea>
+                </div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+                  <button class="btn primary" type="submit">Send ➜</button>
+                  <button class="btn ghost" type="reset">Clear</button>
+                </div>
+                <div class="help">Demo only: shows a toast. Hook to your backend/email provider.</div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer style="padding: 26px 16px 72px; border-top: 1px solid rgba(255,255,255,.08); background: rgba(0,0,0,.15);">
+        <div class="container split">
           <div>
-            <h2>Widgets Racing</h2>
-            <p>Checklist rápida + planner simples (mock). Fica gravado em localStorage.</p>
+            <div style="font-weight:900;letter-spacing:.08em;text-transform:uppercase;">DOWNFORCE MAFIA</div>
+            <div class="muted" style="font-size:12px;">Micro-SaaS for iRacing Teams</div>
+            <div class="muted" style="font-size:12px;margin-top:10px;">© <span id="year"></span> • Landing + Admin UI</div>
           </div>
-          <div class="mini-badges">
-            <span class="badge"><span aria-hidden="true">✅</span> Checklist</span>
-            <span class="badge"><span aria-hidden="true">🧠</span> Planner</span>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <a class="btn tiny ghost" href="#pricing">Pricing</a>
+            <a class="btn tiny" href="#features">Features</a>
+            <button class="btn tiny primary" id="btnOpenLoginFooter">Admin Login</button>
           </div>
         </div>
+      </footer>
+    </div>
 
-        <div class="grid cols-2">
-          <div class="panel reveal">
-            <div class="inner">
-              <b>Checklist pré-corrida</b>
-              <div class="checklist" id="checklist"></div>
-              <p class="help">Marca o que já fizeste. Guarda automaticamente.</p>
+    <!-- ADMIN -->
+    <div class="route" id="routeAdmin">
+      <section class="admin-shell">
+        <div class="container">
+          <div class="admin-top">
+            <div>
+              <h1>Admin Dashboard</h1>
+              <p>Manage your team workspace: events, members, briefings. (Demo data stored in localStorage.)</p>
+              <div class="tabs" role="tablist" aria-label="Admin tabs">
+                <button class="tab active" data-tab="overview">Overview</button>
+                <button class="tab" data-tab="events">Events</button>
+                <button class="tab" data-tab="members">Members</button>
+                <button class="tab" data-tab="settings">Settings</button>
+              </div>
             </div>
-          </div>
 
-          <div class="panel reveal">
-            <div class="inner">
-              <b>Planner rápido</b>
-              <div class="planner">
-                <div class="row">
-                  <div class="field">
-                    <label for="plFuel">Combustível</label>
-                    <input class="input" id="plFuel" type="number" min="0" step="0.1" placeholder="Ex: 54.5">
+            <div class="panel" style="min-width:min(420px, 100%);">
+              <div class="inner">
+                <div class="split" style="align-items:flex-start;">
+                  <div>
+                    <div class="badge good">🔐 Logged in</div>
+                    <div style="margin-top:10px;">
+                      <div class="muted" style="font-size:12px;">Org</div>
+                      <div class="mono" id="adminOrg" style="font-weight:900;">—</div>
+                    </div>
+                    <div style="margin-top:10px;">
+                      <div class="muted" style="font-size:12px;">Admin</div>
+                      <div class="mono" id="adminEmail" style="font-weight:900;">—</div>
+                    </div>
                   </div>
-                  <div class="field">
-                    <label for="plPit">Pit window</label>
-                    <input class="input" id="plPit" type="text" placeholder="Ex: Lap 18–22">
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
+                    <a class="btn tiny ghost" href="#home" id="btnBackHome">Back to landing</a>
+                    <button class="btn tiny danger" id="btnLogout2">Logout</button>
                   </div>
-                  <div class="field">
-                    <label for="plTires">Pneus</label>
-                    <input class="input" id="plTires" type="text" placeholder="Ex: 2x / 4x / none">
-                  </div>
-                </div>
-                <div class="out" id="plannerOut">FUEL=-- | PIT=-- | TIRES=--</div>
-                <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                  <button class="btn tiny primary" id="btnSavePlanner">Guardar</button>
-                  <button class="btn tiny ghost" id="btnResetPlanner">Repor</button>
                 </div>
               </div>
-              <p class="help">Isto é mock. Dá para ligar ao briefing do Discord ou a um backend.</p>
+            </div>
+          </div>
+
+          <!-- tab panels -->
+          <div class="panel" id="tab_overview">
+            <div class="inner">
+              <div class="grid cols-3">
+                <div class="card">
+                  <b>Upcoming event</b>
+                  <p id="ovNextEvent" class="mono">—</p>
+                </div>
+                <div class="card">
+                  <b>Members</b>
+                  <p id="ovMembers" class="mono">—</p>
+                </div>
+                <div class="card">
+                  <b>Last briefing update</b>
+                  <p id="ovBrief" class="mono">—</p>
+                </div>
+              </div>
+              <div class="help" style="margin-top:10px;">Replace these with real metrics from your backend.</div>
+            </div>
+          </div>
+
+          <div class="panel" id="tab_events" style="display:none;">
+            <div class="inner">
+              <div class="split">
+                <div>
+                  <b>Events</b>
+                  <div class="help">Create trainings/races. Export .ics later.</div>
+                </div>
+                <button class="btn tiny primary" id="btnNewEvent">+ New event</button>
+              </div>
+
+              <div class="table-wrap" style="margin-top:12px;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th><th>Time</th><th>Type</th><th>Track</th><th>Car</th><th>Notes</th><th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="eventsTbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" id="tab_members" style="display:none;">
+            <div class="inner">
+              <div class="split">
+                <div>
+                  <b>Members</b>
+                  <div class="help">Invite members and set roles.</div>
+                </div>
+                <button class="btn tiny primary" id="btnInvite">+ Invite</button>
+              </div>
+
+              <div class="table-wrap" style="margin-top:12px;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="membersTbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" id="tab_settings" style="display:none;">
+            <div class="inner">
+              <b>Workspace Settings</b>
+              <div class="grid cols-2" style="margin-top:12px;">
+                <div class="field">
+                  <label for="sOrg">Team/Org name</label>
+                  <input class="input" id="sOrg" type="text" />
+                </div>
+                <div class="field">
+                  <label for="sWebhook">Discord webhook (optional)</label>
+                  <input class="input" id="sWebhook" type="url" placeholder="https://discord.com/api/webhooks/..." />
+                </div>
+              </div>
+
+              <div class="field" style="margin-top:12px;">
+                <label for="sBrand">Brand note</label>
+                <textarea id="sBrand" placeholder="Short tagline or rules of the team..."></textarea>
+              </div>
+
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+                <button class="btn primary" id="btnSaveSettings">Save settings ➜</button>
+                <button class="btn danger" id="btnResetData">Reset demo data</button>
+              </div>
+
+              <div class="help">Settings are stored in <span class="mono">localStorage</span> for demo.</div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-
+      </section>
+    </div>
   </main>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="foot">
-      <div>
-        <div style="font-weight:900;letter-spacing:.08em;text-transform:uppercase;">DOWNFORCE MAFIA</div>
-        <small>iRacing Team • Clean Racing • Real Pace</small>
-        <small style="margin-top:10px;">© <span id="year"></span> • UI demo (sem dados reais)</small>
-      </div>
-
-      <div class="social">
-        <a class="btn tiny ghost" href="https://discord.gg/SEU_LINK" target="_blank" rel="noopener">Discord ↗</a>
-        <a class="btn tiny" href="#recrutamento">Recrutamento</a>
-        <a class="btn tiny" href="#inicio">Topo</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Floating -->
-  <div class="floating" aria-label="Acesso rápido">
-    <a class="float-btn" href="https://discord.gg/SEU_LINK" target="_blank" rel="noopener">
-      Discord <span aria-hidden="true">↗</span>
-    </a>
-  </div>
-
-  <!-- PILOT MODAL -->
-  <div class="modal" id="pilotModal" aria-hidden="true">
-    <div class="modal-card" role="dialog" aria-label="Perfil do piloto">
-      <div class="modal-head">
-        <b id="modalTitle">Piloto</b>
-        <button class="close-x" id="closeModal" aria-label="Fechar">✕</button>
-      </div>
-      <div class="modal-body">
-        <div>
-          <p id="modalDesc">—</p>
-          <div class="kv" id="modalKv"></div>
-        </div>
-        <div>
-          <div class="widget">
-            <h3>Notas internas</h3>
-            <p id="modalNotes">—</p>
-          </div>
-          <div class="widget" style="margin-top:12px;">
-            <h3>Especialidades</h3>
-            <div class="tagline" id="modalTags"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script>
-    /* ---------------------------
-      DATA (MOCK)
-    --------------------------- */
-    const TZ = "Europe/Lisbon";
+    // ---------------------------
+    // Demo "Micro-SaaS" data layer
+    // ---------------------------
+    const KEYS = {
+      session: "dfm_saas_session_v1",
+      events: "dfm_saas_events_v1",
+      members:"dfm_saas_members_v1",
+      settings:"dfm_saas_settings_v1"
+    };
 
-    const races = [
-      { date:"2026-02-02", time:"21:00", serie:"IMSA", track:"Daytona", car:"GTP", format:"Endurance", setup:"Base v1", briefing:"Discord #briefing", durationMin:60 },
-      { date:"2026-02-05", time:"22:00", serie:"GT3", track:"Spa", car:"GT3", format:"Sprint", setup:"Spa v2", briefing:"Discord #briefing", durationMin:40 },
-      { date:"2026-02-09", time:"21:30", serie:"LMP2", track:"Sebring", car:"LMP2", format:"Sprint", setup:"Seb v1", briefing:"Discord #briefing", durationMin:45 },
-      { date:"2026-02-12", time:"22:15", serie:"F4", track:"Imola", car:"F4", format:"Sprint", setup:"Imola v1", briefing:"Discord #briefing", durationMin:30 },
-      { date:"2026-02-16", time:"21:00", serie:"GT3", track:"Monza", car:"GT3", format:"Sprint", setup:"Monza v3", briefing:"Discord #briefing", durationMin:35 },
-      { date:"2026-02-19", time:"22:00", serie:"IMSA", track:"Watkins Glen", car:"GTP", format:"Endurance", setup:"WG v1", briefing:"Discord #briefing", durationMin:75 },
-      { date:"2026-02-23", time:"21:30", serie:"GT3", track:"Nürburgring GP", car:"GT3", format:"Sprint", setup:"Nurb v2", briefing:"Discord #briefing", durationMin:40 },
-      { date:"2026-02-26", time:"22:15", serie:"LMP2", track:"Road Atlanta", car:"LMP2", format:"Sprint", setup:"RA v1", briefing:"Discord #briefing", durationMin:45 },
-      { date:"2026-03-02", time:"21:00", serie:"F4", track:"Okayama", car:"F4", format:"Sprint", setup:"OKY v1", briefing:"Discord #briefing", durationMin:30 },
-      { date:"2026-03-05", time:"22:00", serie:"GT3", track:"Barcelona", car:"GT3", format:"Sprint", setup:"BCN v1", briefing:"Discord #briefing", durationMin:40 },
-    ];
-
-    const trainings = [
-{ dow:5, dayLabel:"Sex", title:"Open practice (sextas)", time:"21:00", details:"track recon + debrief" },
-      { dow:1, dayLabel:"Seg", title:"Setups & Baseline", time:"21:00", details:"15m warmup + 45m runs + debrief" },
-      
-
-    ];
-
-    // "Treino aberto" (próxima ocorrência): 6ª feira 21:00
-    const openTrainingRule = { dow:5, time:"21:00", label:"Open practice (sextas)" };
-
-    const results = [
-      { date:"2026-01-28", serie:"GT3", track:"Spa", car:"GT3", driver:"Miguel", pos:2, quali:3, laps:18, inc:2, badges:["PÓDIO"] },
-      { date:"2026-01-25", serie:"IMSA", track:"Daytona", car:"GTP", driver:"Rui", pos:6, quali:5, laps:45, inc:1, badges:[] },
-      { date:"2026-01-22", serie:"F4", track:"Imola", car:"F4", driver:"João", pos:1, quali:1, laps:20, inc:0, badges:["POLE","PÓDIO"] },
-      { date:"2026-01-19", serie:"GT3", track:"Monza", car:"GT3", driver:"Miguel", pos:8, quali:10, laps:16, inc:4, badges:[] },
-      { date:"2026-01-16", serie:"LMP2", track:"Sebring", car:"LMP2", driver:"Ana", pos:3, quali:2, laps:25, inc:2, badges:["PÓDIO"] },
-      { date:"2026-01-13", serie:"GT3", track:"Barcelona", car:"GT3", driver:"Rui", pos:4, quali:4, laps:18, inc:1, badges:[] },
-      { date:"2026-01-10", serie:"IMSA", track:"Watkins Glen", car:"GTP", driver:"Miguel", pos:5, quali:7, laps:40, inc:3, badges:[] },
-      { date:"2026-01-07", serie:"F4", track:"Okayama", car:"F4", driver:"João", pos:2, quali:6, laps:22, inc:1, badges:["PÓDIO"] },
-      { date:"2026-01-04", serie:"GT3", track:"Nürburgring GP", car:"GT3", driver:"Ana", pos:7, quali:9, laps:18, inc:2, badges:[] },
-      { date:"2026-01-01", serie:"GT3", track:"Road Atlanta", car:"GT3", driver:"Miguel", pos:1, quali:2, laps:16, inc:0, badges:["PÓDIO"] },
-    ];
-
-    const pilots = [
-      { id:"p1", name:"Miguel", role:"Core", sr:"A 3.4", ir:2100, focus:"GT3 / IMSA", notes:"Consistente. Bom em tráfego. Trabalhar 1ª volta.", tags:["Sprint","Endurance","Setups"] },
-      { id:"p2", name:"Rui", role:"Reserve", sr:"B 4.2", ir:1850, focus:"IMSA / GTP", notes:"Ritmo sólido. Rever entradas no pit.", tags:["Endurance","Strategy"] },
-      { id:"p3", name:"João", role:"Academy", sr:"A 2.8", ir:1600, focus:"F4", notes:"Muito rápido em quali. Foco em racecraft limpo.", tags:["Sprint","Quali"] },
-      { id:"p4", name:"Ana", role:"Core", sr:"A 4.1", ir:1950, focus:"LMP2 / GT3", notes:"Boa gestão de pneus. Trabalhar replays de incidentes.", tags:["Endurance","Data"] },
-      { id:"p5", name:"Tiago", role:"Trial", sr:"B 3.0", ir:1500, focus:"GT3", notes:"Onboarding: briefing + checklist + práticas.", tags:["Sprint"] },
-      { id:"p6", name:"Carla", role:"Trial", sr:"C 4.8", ir:1200, focus:"F4", notes:"Evolução rápida. Prioridade: consistência.", tags:["Academy"] },
-    ];
-
-    const kpis = [
-      { label:"Laps / semana", value:"420", hint:"mock" },
-      { label:"Inc / 100 laps", value:"3.1", hint:"mock" },
-      { label:"Pódios", value:"12", hint:"mock" },
-      { label:"Poles", value:"6", hint:"mock" },
-      { label:"Média SR", value:"A 3.6", hint:"mock" },
-      { label:"Média iR", value:"1780", hint:"mock" },
-    ];
-
-    const products = [
-      { id:"m1", name:"T-Shirt DFM", price:19.90 },
-      { id:"m2", name:"Hoodie DFM", price:39.90 },
-      { id:"m3", name:"Cap DFM", price:14.90 },
-      { id:"m4", name:"Sticker Pack", price:4.90 },
-      { id:"m5", name:"Mug DFM", price:9.90 },
-      { id:"m6", name:"Lanyard DFM", price:6.90 },
-    ];
-
-    const checklistItems = [
-      { id:"c1", label:"Configurar fuel (stint)", default:false },
-      { id:"c2", label:"Guardar setup + backup", default:false },
-      { id:"c3", label:"Rever briefing", default:false },
-      { id:"c4", label:"Quali plan (gap / tow)", default:false },
-      { id:"c5", label:"Pit macros / blackbox", default:false },
-      { id:"c6", label:"Replays ON + notas", default:false },
-    ];
-
-    /* ---------------------------
-      HELPERS
-    --------------------------- */
     const $ = (q, el=document) => el.querySelector(q);
     const $$ = (q, el=document) => Array.from(el.querySelectorAll(q));
 
@@ -2031,939 +1085,447 @@
       setTimeout(()=>t.classList.remove("show"), 2600);
     }
 
-    function uniq(arr){ return Array.from(new Set(arr)); }
-
-    function toDateTimeLocal(dateStr, timeStr){
-      // dateStr: YYYY-MM-DD, timeStr: HH:mm
-      const [y,m,d] = dateStr.split("-").map(Number);
-      const [hh,mm] = timeStr.split(":").map(Number);
-      return new Date(y, m-1, d, hh, mm, 0, 0);
+    function loadJSON(key, fallback){
+      try{ return JSON.parse(localStorage.getItem(key) || "null") ?? fallback; }
+      catch{ return fallback; }
+    }
+    function saveJSON(key, value){
+      localStorage.setItem(key, JSON.stringify(value));
     }
 
-    function fmtDatePT(d){
-      return d.toLocaleDateString("pt-PT", { weekday:"short", year:"numeric", month:"short", day:"2-digit" });
-    }
-    function fmtTimePT(d){
-      return d.toLocaleTimeString("pt-PT", { hour:"2-digit", minute:"2-digit" });
-    }
-
-    function nextOccurrenceByDowTime(dow, timeHHMM){
-      const now = new Date();
-      const [hh,mm] = timeHHMM.split(":").map(Number);
-      const target = new Date(now);
-      target.setHours(hh, mm, 0, 0);
-
-      const delta = (dow - now.getDay() + 7) % 7;
-      target.setDate(now.getDate() + delta);
-
-      // se for hoje mas já passou, empurra 7 dias
-      if (delta === 0 && target <= now) target.setDate(target.getDate() + 7);
-      return target;
+    function nowISO(){
+      const d = new Date();
+      const pad = n => String(n).padStart(2,"0");
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
     }
 
+    function ensureDemoData(){
+      const events = loadJSON(KEYS.events, null);
+      const members = loadJSON(KEYS.members, null);
+      const settings = loadJSON(KEYS.settings, null);
+
+      if (!events){
+        saveJSON(KEYS.events, [
+          { id: crypto.randomUUID(), date: nowISO(), time:"21:00", type:"Training", track:"Spa", car:"GT3", notes:"Baseline + debrief" },
+          { id: crypto.randomUUID(), date: "2026-02-16", time:"21:00", type:"Race", track:"Monza", car:"GT3", notes:"Pit window Lap 18–22" },
+        ]);
+      }
+      if (!members){
+        saveJSON(KEYS.members, [
+          { id: crypto.randomUUID(), name:"Miguel", email:"miguel@team.com", role:"Core", status:"Active" },
+          { id: crypto.randomUUID(), name:"Ana", email:"ana@team.com", role:"Core", status:"Active" },
+          { id: crypto.randomUUID(), name:"Rui", email:"rui@team.com", role:"Reserve", status:"Invited" },
+        ]);
+      }
+      if (!settings){
+        saveJSON(KEYS.settings, {
+          org: "Downforce Mafia",
+          webhook: "",
+          brand: "Clean racing. Real pace. No drama."
+        });
+      }
+    }
+
+    // ---------------------------
+    // Fake auth (replace with real)
+    // ---------------------------
+    const auth = {
+      getSession(){ return loadJSON(KEYS.session, null); },
+      isAuthed(){ return !!auth.getSession(); },
+      login({email, org}){
+        // Replace with: POST /auth/login -> store token
+        const session = { email, org: org || "Team", at: Date.now() };
+        saveJSON(KEYS.session, session);
+        return session;
+      },
+      logout(){
+        localStorage.removeItem(KEYS.session);
+      }
+    };
+
+    // ---------------------------
+    // Routing (landing vs admin)
+    // ---------------------------
     function setActiveNavByHash(){
-      const hash = (location.hash || "#inicio").replace("#","");
+      const hash = (location.hash || "#home").replace("#","");
       $$("#navLinks a[data-target]").forEach(a=>{
         a.classList.toggle("active", a.dataset.target === hash);
       });
     }
 
-    function downloadICS(filename, text){
-      const blob = new Blob([text], {type:"text/calendar;charset=utf-8"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+    function showRoute(route){
+      $("#routeLanding").classList.toggle("active", route === "landing");
+      $("#routeAdmin").classList.toggle("active", route === "admin");
     }
 
-    function buildICSEvent({ title, start, durationMin=60, description="" }){
-      const pad = n => String(n).padStart(2,"0");
-      // ICS em "local time" sem TZID (simplificado)
-      const dt = (d)=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
-      const end = new Date(start.getTime() + durationMin*60000);
-
-      const uid = `dfm-${start.getTime()}@downforcemafia`;
-      return [
-        "BEGIN:VCALENDAR",
-        "VERSION:2.0",
-        "PRODID:-//DOWNFORCE MAFIA//DFM//PT",
-        "CALSCALE:GREGORIAN",
-        "BEGIN:VEVENT",
-        `UID:${uid}`,
-        `DTSTAMP:${dt(new Date())}`,
-        `DTSTART:${dt(start)}`,
-        `DTEND:${dt(end)}`,
-        `SUMMARY:${title}`,
-        `DESCRIPTION:${description.replace(/\n/g,"\\n")}`,
-        "END:VEVENT",
-        "END:VCALENDAR"
-      ].join("\r\n");
-    }
-
-    /* ---------------------------
-      RENDER: CALENDÁRIO
-    --------------------------- */
-    function renderCalendar(){
-      const tbody = $("#racesTbody");
-      const serieSel = $("#filterSerie");
-      const carSel = $("#filterCar");
-
-      const series = ["Todas", ...uniq(races.map(r=>r.serie))];
-      const cars = ["Todos", ...uniq(races.map(r=>r.car))];
-
-      if (!serieSel.options.length){
-        series.forEach(s=>{
-          const o=document.createElement("option");
-          o.value=s; o.textContent=s;
-          serieSel.appendChild(o);
-        });
-      }
-      if (!carSel.options.length){
-        cars.forEach(c=>{
-          const o=document.createElement("option");
-          o.value=c; o.textContent=c;
-          carSel.appendChild(o);
-        });
-      }
-
-      const serieV = serieSel.value || "Todas";
-      const carV = carSel.value || "Todos";
-
-      const rows = races
-        .filter(r => (serieV==="Todas" || r.serie===serieV))
-        .filter(r => (carV==="Todos" || r.car===carV))
-        .map(r=>{
-          const d = toDateTimeLocal(r.date, r.time);
-          const title = `${r.serie} — ${r.track} (${r.car})`;
-          return `
-            <tr>
-              <td>${r.date}<span class="small">${fmtDatePT(d)}</span></td>
-              <td class="nowrap">${r.time}<span class="small">${TZ}</span></td>
-              <td>${r.serie}</td>
-              <td>${r.track}</td>
-              <td>${r.car}</td>
-              <td><span class="badge">${r.format}</span></td>
-              <td><a class="link" href="#" data-setup="${r.setup}">${r.setup}</a></td>
-              <td><span class="badge">${r.briefing}</span></td>
-              <td class="nowrap">
-                <button class="btn tiny" data-ics='${JSON.stringify({title, startISO:r.date+"T"+r.time, durationMin:r.durationMin})}'>.ics</button>
-              </td>
-            </tr>
-          `;
-        }).join("");
-
-      tbody.innerHTML = rows || `<tr><td colspan="9"><span class="badge warn">Sem eventos com estes filtros.</span></td></tr>`;
-    }
-
-    /* ---------------------------
-      RENDER: TREINOS
-    --------------------------- */
-function getNextOccurrenceForTraining(t){
-  return nextOccurrenceByDowTime(t.dow, t.time);
-}
-
-function renderTrainings(){
-  const grid = $("#weekGrid");
-  const now = new Date();
-
-  // cria lista com a próxima ocorrência real de cada treino
-  const upcoming = trainings
-    .map(t => ({
-      ...t,
-      nextDate: getNextOccurrenceForTraining(t)
-    }))
-    .filter(t => t.nextDate > now) // segurança
-    .sort((a,b) => a.nextDate - b.nextDate);
-
-  // mostra só os próximos 7 (ajusta como quiseres)
-  const view = upcoming.slice(0, 7);
-
-  grid.innerHTML = view.map(t=>{
-    const bullets = (t.details || "")
-      .split("+")
-      .map(s=>s.trim())
-      .filter(Boolean);
-
-    const dateLabel = t.nextDate.toLocaleDateString("pt-PT", {
-      weekday: "short", day:"2-digit", month:"short"
-    });
-
-    return `
-      <div class="day" data-dow="${t.dow}">
-        <div class="day-head">
-          <h4>${t.dayLabel}</h4>
-          <div class="time">${dateLabel} • ${t.time}</div>
-        </div>
-
-        <div class="slot">
-          <b>${t.title}</b>
-          ${
-            bullets.length
-              ? `<ul>${bullets.map(x=>`<li>${x}</li>`).join("")}</ul>`
-              : `<small>${t.details || ""}</small>`
-          }
-        </div>
-
-        <button class="btn tiny" data-remind='${JSON.stringify({dow:t.dow,time:t.time,title:t.title})}'>
-          Lembrar-me
-        </button>
-      </div>
-    `;
-  }).join("");
-
-  markNextTrainingCard(view);
-}
-
-
-function markNextTrainingCard(viewList){
-  $$("#weekGrid .day").forEach(el=>el.classList.remove("next"));
-
-  // se vier lista (renderTrainings passa), marca o primeiro card como "next"
-  if (viewList && viewList.length){
-    const first = $$("#weekGrid .day")[0];
-    if (first) first.classList.add("next");
-    return;
-  }
-
-  // fallback antigo (sextas)
-  const card = $(`#weekGrid .day[data-dow="${openTrainingRule.dow}"]`);
-  if (card) card.classList.add("next");
-}
-function updateOpenTraining(){
-  const next = nextOccurrenceByDowTime(openTrainingRule.dow, openTrainingRule.time);
-
-  // Badge info
-  const info = $("#openTrainingInfo");
-  info.textContent = `${openTrainingRule.label} • ${fmtDatePT(next)} • ${fmtTimePT(next)}`;
-  info.classList.remove("red");
-  info.classList.add("good");
-
-  // ciclo de 7 dias (para o progresso)
-  const cycleStart = new Date(next.getTime() - 7*24*60*60*1000);
-  const totalMs = next - cycleStart;
-
-  const ddWrap = $("#opDDWrap");
-  const ddEl = $("#opDD");
-  const hhEl = $("#opHH");
-  const mmEl = $("#opMM");
-  const ssEl = $("#opSS");
-  const timerEl = $("#openTrainingTimer");
-  const progEl = $("#openTrainingProg");
-
-  const tick = ()=>{
-    const now = new Date();
-    let ms = next - now;
-
-    // LIVE
-    if (ms <= 0){
-      timerEl.classList.remove("urgent");
-      timerEl.classList.add("live");
-
-      ddWrap.style.display = "none";
-
-      // escreve LIVE grande usando HH/MM/SS
-      hhEl.textContent = "LI";
-      mmEl.textContent = "VE";
-      ssEl.textContent = "!!";
-
-      progEl.style.width = "0%"; // barra vazia no live (countdown)
-      $("#openTrainingInfo").textContent = "Treino aberto a decorrer (mock)";
-      return;
-    }
-
-    // urgente < 10 min
-    const urgent = ms <= 10*60*1000;
-    timerEl.classList.toggle("urgent", urgent);
-    timerEl.classList.remove("live");
-
-    const s = Math.floor(ms/1000);
-    const dd = Math.floor(s/86400);
-    const hh = Math.floor((s%86400)/3600);
-    const mm = Math.floor((s%3600)/60);
-    const ss = s%60;
-
-    // esconder DD quando 0
-    if (dd > 0){
-      ddWrap.style.display = "inline-flex";
-      ddEl.textContent = String(dd).padStart(2,"0");
-    } else {
-      ddWrap.style.display = "none";
-    }
-
-    hhEl.textContent = String(hh).padStart(2,"0");
-    mmEl.textContent = String(mm).padStart(2,"0");
-    ssEl.textContent = String(ss).padStart(2,"0");
-
-    // ===== PROGRESSO (racing): barra ESVAZIA à medida que se aproxima =====
-    // pct = tempo restante / total do ciclo (0..1)
-    const pct = Math.max(0, Math.min(1, ms / totalMs));
-    progEl.style.width = `${(pct*100).toFixed(2)}%`;
-
-    requestAnimationFrame(()=>setTimeout(tick, 250));
-  };
-
-  tick();
-
-  // Atualizar o card "Próxima sessão"
-  const nextRace = races.map(r=>{
-    const d = toDateTimeLocal(r.date, r.time);
-    return { when:d, text:`${r.serie} • ${r.track} (${r.car}) • ${fmtDatePT(d)} • ${fmtTimePT(d)}` };
-  }).filter(x=>x.when>new Date()).sort((a,b)=>a.when-b.when)[0];
-
-  const pick = (!nextRace || next < nextRace.when)
-    ? { when: next, text:`Treino aberto • ${fmtDatePT(next)} • ${fmtTimePT(next)}` }
-    : nextRace;
-
-  $("#nextSessionText").textContent = pick ? pick.text : "Sem sessões futuras (mock).";
-  $("#btnRememberNext").dataset.remindNext = JSON.stringify({ when: pick?.when?.toISOString?.() || null, text: pick?.text || "" });
-}
-
-
-
-    /* ---------------------------
-      RENDER: RESULTADOS
-    --------------------------- */
-    function renderResults(){
-      const tbody = $("#resultsTbody");
-      const q = ($("#resultsSearch").value || "").trim().toLowerCase();
-
-      const rows = results
-        .filter(r => !q || r.track.toLowerCase().includes(q) || r.driver.toLowerCase().includes(q))
-        .map(r=>{
-          const badgeHtml = (r.badges||[]).map(b=>{
-            if (b==="PÓDIO") return `<span class="badge good">🏆 ${b}</span>`;
-            if (b==="POLE") return `<span class="badge warn">🎯 ${b}</span>`;
-            return `<span class="badge">${b}</span>`;
-          }).join(" ");
-          return `
-            <tr>
-              <td>${r.date}</td>
-              <td>${r.serie}</td>
-              <td>${r.track}</td>
-              <td>${r.car}</td>
-              <td>${r.driver}</td>
-              <td class="nowrap"><b>P${String(r.pos).padStart(2,"0")}</b></td>
-              <td class="nowrap">P${String(r.quali).padStart(2,"0")}</td>
-              <td class="nowrap">${r.laps}</td>
-              <td class="nowrap">${r.inc}</td>
-              <td>${badgeHtml || `<span class="badge">—</span>`}</td>
-            </tr>
-          `;
-        }).join("");
-
-      tbody.innerHTML = rows || `<tr><td colspan="10"><span class="badge warn">Sem resultados para essa pesquisa.</span></td></tr>`;
-    }
-
-    /* ---------------------------
-      RENDER: PILOTOS + MODAL
-    --------------------------- */
-    function renderPilots(){
-      const grid = $("#pilotGrid");
-      const q = ($("#pilotSearch").value||"").trim().toLowerCase();
-      const role = $("#pilotRole").value || "Todos";
-
-      const roles = ["Todos", ...uniq(pilots.map(p=>p.role))];
-      if (!$("#pilotRole").options.length){
-        roles.forEach(r=>{
-          const o=document.createElement("option");
-          o.value=r; o.textContent=r;
-          $("#pilotRole").appendChild(o);
-        });
-      }
-
-      const list = pilots
-        .filter(p => role==="Todos" || p.role===role)
-        .filter(p => !q || (p.name+" "+p.role+" "+p.focus).toLowerCase().includes(q));
-
-      grid.innerHTML = list.map(p=>`
-        <div class="pilot" role="button" tabindex="0" data-pilot="${p.id}">
-          <div class="ph"><span>${p.role}</span></div>
-          <div class="meta">
-            <b>${p.name}</b>
-            <small>${p.focus}</small>
-            <div class="row">
-              <span class="badge good">SR ${p.sr}</span>
-              <span class="badge">iR ${p.ir}</span>
-            </div>
-          </div>
-        </div>
-      `).join("") || `<div class="badge warn">Sem pilotos com estes filtros.</div>`;
-    }
-
-    function openPilotModal(p){
-      $("#pilotModal").classList.add("open");
-      $("#pilotModal").setAttribute("aria-hidden","false");
-
-      $("#modalTitle").textContent = `${p.name} • ${p.role}`;
-      $("#modalDesc").textContent = `Foco: ${p.focus}`;
-
-      $("#modalNotes").textContent = p.notes || "—";
-
-      $("#modalKv").innerHTML = `
-        <div class="k"><span>Safety Rating</span><b>${p.sr}</b></div>
-        <div class="k"><span>iRating</span><b>${p.ir}</b></div>
-        <div class="k"><span>Role</span><b>${p.role}</b></div>
-        <div class="k"><span>Foco</span><b>${p.focus}</b></div>
-      `;
-
-      $("#modalTags").innerHTML = (p.tags||[]).map(t=>`<span class="pill"><i class="r" aria-hidden="true"></i> ${t}</span>`).join("");
-    }
-
-    function closePilotModal(){
-      $("#pilotModal").classList.remove("open");
-      $("#pilotModal").setAttribute("aria-hidden","true");
-    }
-
-    /* ---------------------------
-      RENDER: STATS + CANVAS
-    --------------------------- */
-    function renderKPIs(){
-      const grid = $("#kpiGrid");
-      grid.innerHTML = kpis.map(k=>`
-        <div class="kpi">
-          <div class="label">${k.label}</div>
-          <div class="value">${k.value}</div>
-          <div class="hint">${k.hint}</div>
-        </div>
-      `).join("");
-    }
-
-    function drawPaceCanvas(){
-      const c = $("#paceCanvas");
-      const ctx = c.getContext("2d");
-
-      // mock points (melhor é baixo)
-      const pts = [112, 110, 109, 111, 108, 107, 109, 106, 105, 106, 104, 103, 104, 102, 101];
-      const w = c.width, h = c.height;
-      const pad = 40;
-
-      ctx.clearRect(0,0,w,h);
-
-      // axes
-      ctx.globalAlpha = 0.85;
-      ctx.beginPath();
-      ctx.moveTo(pad, pad);
-      ctx.lineTo(pad, h-pad);
-      ctx.lineTo(w-pad, h-pad);
-      ctx.stroke();
-
-      // scale
-      const min = Math.min(...pts);
-      const max = Math.max(...pts);
-      const xStep = (w - pad*2) / (pts.length - 1);
-      const y = v => (h - pad) - ((v - min) / (max - min || 1)) * (h - pad*2);
-
-      // line
-      ctx.globalAlpha = 0.9;
-      ctx.beginPath();
-      pts.forEach((v,i)=>{
-        const x = pad + i*xStep;
-        const yy = y(v);
-        if (i===0) ctx.moveTo(x, yy);
-        else ctx.lineTo(x, yy);
-      });
-      ctx.stroke();
-
-      // points + labels
-      ctx.globalAlpha = 0.95;
-      pts.forEach((v,i)=>{
-        const x = pad + i*xStep;
-        const yy = y(v);
-        ctx.beginPath();
-        ctx.arc(x, yy, 4, 0, Math.PI*2);
-        ctx.fill();
-
-        if (i===0 || i===pts.length-1){
-          ctx.fillText(String(v), x-6, yy-10);
-        }
-      });
-
-      ctx.globalAlpha = 1;
-      ctx.fillText("mock pace index", pad, pad-12);
-    }
-
-    /* ---------------------------
-      RENDER: LOJA + CART (localStorage)
-    --------------------------- */
-    const CART_KEY = "dfm_cart_v1";
-    function loadCart(){ return JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }
-    function saveCart(items){ localStorage.setItem(CART_KEY, JSON.stringify(items)); }
-    function cartSubtotal(items){
-      const sum = items.reduce((a, it)=> a + (it.price * it.qty), 0);
-      return sum;
-    }
-
-    function renderProducts(){
-      const grid = $("#productsGrid");
-      grid.innerHTML = products.map(p=>`
-        <div class="product">
-          <div class="img">${p.name}</div>
-          <div class="body">
-            <b>${p.name}</b>
-            <div class="price">€${p.price.toFixed(2)}</div>
-            <button class="btn tiny primary" data-add="${p.id}">Adicionar</button>
-          </div>
-        </div>
-      `).join("");
-    }
-
-    function renderCart(){
-      const list = $("#cartList");
-      const items = loadCart();
-
-      if (!items.length){
-        list.innerHTML = `<li><span class="badge">Carrinho vazio</span><span class="qty">—</span></li>`;
-      } else {
-        list.innerHTML = items.map(it=>`
-          <li>
-            <div>
-              <b>${it.name}</b>
-              <small class="mono">€${it.price.toFixed(2)}</small>
-            </div>
-            <div class="qty">
-              <button class="btn tiny" data-dec="${it.id}">−</button>
-              <span>${it.qty}</span>
-              <button class="btn tiny" data-inc="${it.id}">+</button>
-              <button class="btn tiny danger" data-del="${it.id}">✕</button>
-            </div>
-          </li>
-        `).join("");
-      }
-
-      $("#cartSubtotal").textContent = `€${cartSubtotal(items).toFixed(2)}`;
-    }
-
-    function addToCart(pid){
-      const p = products.find(x=>x.id===pid);
-      if (!p) return;
-      const items = loadCart();
-      const found = items.find(x=>x.id===pid);
-      if (found) found.qty++;
-      else items.push({ id:p.id, name:p.name, price:p.price, qty:1 });
-      saveCart(items);
-      renderCart();
-      toast("Adicionado ao carrinho", p.name);
-    }
-
-    /* ---------------------------
-      CHECKLIST + PLANNER (localStorage)
-    --------------------------- */
-    const CHECK_KEY = "dfm_checklist_v1";
-    const PLAN_KEY = "dfm_planner_v1";
-
-    function loadChecklist(){
-      const base = checklistItems.map(x=>({ ...x }));
-      const saved = JSON.parse(localStorage.getItem(CHECK_KEY) || "null");
-      if (!saved) return base;
-      return base.map(it=>{
-        const s = saved.find(x=>x.id===it.id);
-        return s ? { ...it, default: !!s.done } : it;
-      });
-    }
-    function saveChecklist(state){
-      localStorage.setItem(CHECK_KEY, JSON.stringify(state.map(x=>({id:x.id, done:!!x.done})) ));
-    }
-
-    function renderChecklist(){
-      const host = $("#checklist");
-      const state = loadChecklist();
-
-      host.innerHTML = state.map(it=>`
-        <label class="check">
-          <input type="checkbox" data-check="${it.id}" ${it.default ? "checked":""}>
-          <span>${it.label}</span>
-        </label>
-      `).join("");
-
-      // on change
-      $$("#checklist input[type='checkbox']").forEach(ch=>{
-        ch.addEventListener("change", ()=>{
-          const id = ch.dataset.check;
-          const current = loadChecklist().map(x=>({
-            ...x,
-            default: x.id===id ? ch.checked : x.default
-          }));
-          saveChecklist(current.map(x=>({id:x.id, done:x.default})));
-          toast("Checklist atualizada");
-        });
-      });
-    }
-
-    function loadPlanner(){
-      return JSON.parse(localStorage.getItem(PLAN_KEY) || '{"fuel":"","pit":"","tires":""}');
-    }
-    function savePlanner(v){ localStorage.setItem(PLAN_KEY, JSON.stringify(v)); }
-    function renderPlanner(){
-      const v = loadPlanner();
-      $("#plFuel").value = v.fuel || "";
-      $("#plPit").value = v.pit || "";
-      $("#plTires").value = v.tires || "";
-      updatePlannerOut();
-    }
-    function updatePlannerOut(){
-      const fuel = $("#plFuel").value || "--";
-      const pit = $("#plPit").value || "--";
-      const tires = $("#plTires").value || "--";
-      $("#plannerOut").textContent = `FUEL=${fuel} | PIT=${pit} | TIRES=${tires}`;
-    }
-
-    /* ---------------------------
-      NOTIFICATIONS (mock/local)
-    --------------------------- */
-    async function requestNotifications(){
-      if (!("Notification" in window)) {
-        toast("Notificações não suportadas");
+    function guardAdmin(){
+      if (!auth.isAuthed()){
+        // bounce to landing + open login
+        showRoute("landing");
+        location.hash = "#home";
+        openLogin();
+        toast("Admin access required", "Please login as a team administrator.");
         return false;
       }
-      const perm = await Notification.requestPermission();
-      if (perm !== "granted"){
-        toast("Notificações: sem permissão");
-        return false;
-      }
-      toast("Notificações: OK");
+      showRoute("admin");
       return true;
     }
 
-    function scheduleLocalReminder(when, title){
-      // Isto é “fake scheduling” (sem service worker). Apenas mostra uma toast no tempo certo
+    function routeFromHash(){
+      const h = (location.hash || "#home").toLowerCase();
+      setActiveNavByHash();
+
+      if (h === "#admin"){
+        if (!guardAdmin()) return;
+        renderAdmin();
+      } else {
+        showRoute("landing");
+      }
+    }
+
+    // ---------------------------
+    // Login modal
+    // ---------------------------
+    function openLogin(){
+      $("#loginModal").classList.add("open");
+      $("#loginModal").setAttribute("aria-hidden","false");
+      $("#loginEmail").focus();
+    }
+    function closeLogin(){
+      $("#loginModal").classList.remove("open");
+      $("#loginModal").setAttribute("aria-hidden","true");
+    }
+
+    // ---------------------------
+    // Admin UI
+    // ---------------------------
+    function fmtNextEvent(events){
       const now = new Date();
-      const ms = when - now;
-      if (ms <= 0){
-        toast("Lembrete (mock)", title);
+      const items = [...events].map(e=>{
+        const d = new Date(`${e.date}T${e.time}:00`);
+        return { ...e, when: d };
+      }).filter(x=>x.when > now).sort((a,b)=>a.when-b.when);
+      if (!items.length) return "—";
+      const x = items[0];
+      return `${x.type} • ${x.track} (${x.car}) • ${x.date} ${x.time}`;
+    }
+
+    function renderAdminHeader(){
+      const sess = auth.getSession();
+      const settings = loadJSON(KEYS.settings, {});
+      $("#adminEmail").textContent = sess?.email || "—";
+      $("#adminOrg").textContent = settings.org || sess?.org || "—";
+      $("#sOrg").value = settings.org || "";
+      $("#sWebhook").value = settings.webhook || "";
+      $("#sBrand").value = settings.brand || "";
+    }
+
+    function renderOverview(){
+      const events = loadJSON(KEYS.events, []);
+      const members = loadJSON(KEYS.members, []);
+      const settings = loadJSON(KEYS.settings, {});
+
+      $("#ovNextEvent").textContent = fmtNextEvent(events);
+      $("#ovMembers").textContent = String(members.length);
+      $("#ovBrief").textContent = (settings.brand || "—");
+    }
+
+    function renderEvents(){
+      const tbody = $("#eventsTbody");
+      const events = loadJSON(KEYS.events, []);
+      if (!events.length){
+        tbody.innerHTML = `<tr><td colspan="7"><span class="badge warn">No events yet</span></td></tr>`;
         return;
       }
-      setTimeout(()=>{
-        toast("Lembrete (mock)", title);
-        try{ new Notification("DFM — Lembrete", { body: title }); }catch(e){}
-      }, ms);
-      toast("Lembrete criado", `${fmtDatePT(when)} • ${fmtTimePT(when)}`);
+
+      tbody.innerHTML = events.map(e=>`
+        <tr>
+          <td>${e.date}</td>
+          <td class="mono">${e.time}</td>
+          <td><span class="badge">${e.type}</span></td>
+          <td>${e.track}</td>
+          <td>${e.car}</td>
+          <td class="muted">${e.notes || ""}</td>
+          <td>
+            <button class="btn tiny" data-edit-event="${e.id}">Edit</button>
+            <button class="btn tiny danger" data-del-event="${e.id}">Delete</button>
+          </td>
+        </tr>
+      `).join("");
     }
 
-    /* ---------------------------
-      SCROLL REVEAL
-    --------------------------- */
-    function initReveal(){
-      const els = $$(".reveal");
-      const io = new IntersectionObserver(entries=>{
-        entries.forEach(e=>{
-          if (e.isIntersecting) e.target.classList.add("in");
-        });
-      }, { threshold: 0.12 });
-      els.forEach(el=>io.observe(el));
+    function renderMembers(){
+      const tbody = $("#membersTbody");
+      const members = loadJSON(KEYS.members, []);
+      if (!members.length){
+        tbody.innerHTML = `<tr><td colspan="5"><span class="badge warn">No members yet</span></td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = members.map(m=>`
+        <tr>
+          <td><b>${m.name}</b></td>
+          <td class="mono">${m.email}</td>
+          <td><span class="badge">${m.role}</span></td>
+          <td>${m.status === "Active" ? `<span class="badge good">Active</span>` : `<span class="badge warn">${m.status}</span>`}</td>
+          <td>
+            <button class="btn tiny" data-edit-member="${m.id}">Edit</button>
+            <button class="btn tiny danger" data-del-member="${m.id}">Remove</button>
+          </td>
+        </tr>
+      `).join("");
     }
 
-    /* ---------------------------
-      MOBILE DRAWER
-    --------------------------- */
-    function openDrawer(){
-      const d = $("#drawer");
-      d.classList.add("open");
-      d.setAttribute("aria-hidden","false");
-    }
-    function closeDrawer(){
-      const d = $("#drawer");
-      d.classList.remove("open");
-      d.setAttribute("aria-hidden","true");
+    function renderAdmin(){
+      renderAdminHeader();
+      renderOverview();
+      renderEvents();
+      renderMembers();
+
+      // show admin nav items
+      $("#navAdmin").style.display = "inline-flex";
+      $("#drawerAdmin").style.display = "block";
     }
 
-    /* ---------------------------
-      LIVE / OVERLAY (mock)
-    --------------------------- */
-    function toggleLive(){
-      const lamp = $("#liveLamp");
-      const status = $("#liveStatus");
-      const chip = $("#overlayChip");
-      const isOn = lamp.classList.toggle("on");
-      status.textContent = isOn ? "ONLINE (mock)" : "OFFLINE (mock)";
-      status.classList.toggle("good", isOn);
-      chip.style.display = isOn ? "inline-flex" : "none";
-      toast(isOn ? "Live ON (mock)" : "Live OFF (mock)");
+    function setAuthedUI(){
+      const authed = auth.isAuthed();
+      $("#btnLogout").style.display = authed ? "inline-flex" : "none";
+      $("#btnLogin").style.display = authed ? "none" : "inline-flex";
+      $("#drawerLogout").style.display = authed ? "inline-flex" : "none";
+      $("#drawerLogin").style.display = authed ? "none" : "inline-flex";
+      $("#navAdmin").style.display = authed ? "inline-flex" : "none";
+      $("#drawerAdmin").style.display = authed ? "block" : "none";
     }
 
-    function overlayDemo(){
-      const names = ["MIGUEL","RUI","ANA","JOÃO","CARLA","TIAGO"];
-      $("#ovDriver").textContent = names[Math.floor(Math.random()*names.length)];
-      $("#ovPos").textContent = "P" + String(1+Math.floor(Math.random()*18)).padStart(2,"0");
-      const base = 48 + Math.random()*5;
-      $("#ovLast").textContent = `1:${(base+Math.random()).toFixed(3)}`;
-      $("#ovBest").textContent = `1:${(base-0.8).toFixed(3)}`;
-      toast("Overlay demo (mock)");
+    // ---------------------------
+    // Tabs
+    // ---------------------------
+    function setTab(name){
+      $$(".tab").forEach(t=>t.classList.toggle("active", t.dataset.tab === name));
+      $("#tab_overview").style.display = (name==="overview") ? "block" : "none";
+      $("#tab_events").style.display = (name==="events") ? "block" : "none";
+      $("#tab_members").style.display = (name==="members") ? "block" : "none";
+      $("#tab_settings").style.display = (name==="settings") ? "block" : "none";
     }
 
-    function copyOverlayJSON(){
-      const payload = {
-        team:"DOWNFORCE MAFIA",
-        driver: $("#ovDriver").textContent,
-        pos: $("#ovPos").textContent,
-        last: $("#ovLast").textContent,
-        best: $("#ovBest").textContent,
-        live: $("#liveLamp").classList.contains("on"),
-      };
-      navigator.clipboard?.writeText(JSON.stringify(payload, null, 2));
-      toast("Copiado", "JSON (mock) para clipboard");
+    // ---------------------------
+    // Drawer
+    // ---------------------------
+    function openDrawer(){ $("#drawer").classList.add("open"); $("#drawer").setAttribute("aria-hidden","false"); }
+    function closeDrawer(){ $("#drawer").classList.remove("open"); $("#drawer").setAttribute("aria-hidden","true"); }
+
+    // ---------------------------
+    // CRUD modals (simple prompt-based demo)
+    // ---------------------------
+    function newEvent(){
+      const date = prompt("Event date (YYYY-MM-DD):", nowISO());
+      if (!date) return;
+      const time = prompt("Time (HH:MM):", "21:00") || "21:00";
+      const type = prompt("Type (Training/Race):", "Training") || "Training";
+      const track = prompt("Track:", "Spa") || "Spa";
+      const car = prompt("Car:", "GT3") || "GT3";
+      const notes = prompt("Notes:", "Baseline + debrief") || "";
+      const events = loadJSON(KEYS.events, []);
+      events.push({ id: crypto.randomUUID(), date, time, type, track, car, notes });
+      saveJSON(KEYS.events, events);
+      renderEvents(); renderOverview();
+      toast("Event created", `${type} • ${date} ${time}`);
     }
 
-    /* ---------------------------
-      INIT + EVENTS
-    --------------------------- */
+    function editEvent(id){
+      const events = loadJSON(KEYS.events, []);
+      const e = events.find(x=>x.id===id);
+      if (!e) return;
+      e.date = prompt("Date (YYYY-MM-DD):", e.date) || e.date;
+      e.time = prompt("Time (HH:MM):", e.time) || e.time;
+      e.type = prompt("Type:", e.type) || e.type;
+      e.track = prompt("Track:", e.track) || e.track;
+      e.car = prompt("Car:", e.car) || e.car;
+      e.notes = prompt("Notes:", e.notes || "") ?? e.notes;
+      saveJSON(KEYS.events, events);
+      renderEvents(); renderOverview();
+      toast("Event updated", `${e.type} • ${e.date} ${e.time}`);
+    }
+
+    function delEvent(id){
+      const events = loadJSON(KEYS.events, []);
+      const idx = events.findIndex(x=>x.id===id);
+      if (idx<0) return;
+      if (!confirm("Delete this event?")) return;
+      const removed = events.splice(idx,1)[0];
+      saveJSON(KEYS.events, events);
+      renderEvents(); renderOverview();
+      toast("Event deleted", `${removed.type} • ${removed.date} ${removed.time}`);
+    }
+
+    function inviteMember(){
+      const name = prompt("Member name:", "New Driver");
+      if (!name) return;
+      const email = prompt("Email:", "driver@team.com");
+      if (!email) return;
+      const role = prompt("Role (Core/Reserve/Trial/Academy):", "Trial") || "Trial";
+      const members = loadJSON(KEYS.members, []);
+      members.push({ id: crypto.randomUUID(), name, email, role, status:"Invited" });
+      saveJSON(KEYS.members, members);
+      renderMembers(); renderOverview();
+      toast("Invite created", `${name} • ${role}`);
+    }
+
+    function editMember(id){
+      const members = loadJSON(KEYS.members, []);
+      const m = members.find(x=>x.id===id);
+      if (!m) return;
+      m.name = prompt("Name:", m.name) || m.name;
+      m.email = prompt("Email:", m.email) || m.email;
+      m.role = prompt("Role:", m.role) || m.role;
+      m.status = prompt("Status (Active/Invited):", m.status) || m.status;
+      saveJSON(KEYS.members, members);
+      renderMembers(); renderOverview();
+      toast("Member updated", `${m.name} • ${m.role}`);
+    }
+
+    function delMember(id){
+      const members = loadJSON(KEYS.members, []);
+      const idx = members.findIndex(x=>x.id===id);
+      if (idx<0) return;
+      if (!confirm("Remove this member?")) return;
+      const removed = members.splice(idx,1)[0];
+      saveJSON(KEYS.members, members);
+      renderMembers(); renderOverview();
+      toast("Member removed", removed.name);
+    }
+
+    function saveSettings(){
+      const settings = loadJSON(KEYS.settings, {});
+      settings.org = $("#sOrg").value.trim() || settings.org || "Team";
+      settings.webhook = $("#sWebhook").value.trim();
+      settings.brand = $("#sBrand").value.trim();
+      saveJSON(KEYS.settings, settings);
+      renderAdminHeader();
+      renderOverview();
+      toast("Settings saved", settings.org);
+    }
+
+    function resetDemoData(){
+      if (!confirm("Reset demo data (events/members/settings)?")) return;
+      localStorage.removeItem(KEYS.events);
+      localStorage.removeItem(KEYS.members);
+      localStorage.removeItem(KEYS.settings);
+      ensureDemoData();
+      renderAdmin();
+      toast("Demo data reset");
+    }
+
+    // ---------------------------
+    // INIT
+    // ---------------------------
     function init(){
       $("#year").textContent = new Date().getFullYear();
+      ensureDemoData();
+      setAuthedUI();
 
-      // Navbar active
+      // hash route
       setActiveNavByHash();
-      window.addEventListener("hashchange", setActiveNavByHash);
+      window.addEventListener("hashchange", routeFromHash);
 
-      // Render all
-      renderCalendar();
-      renderTrainings();
-      updateOpenTraining();
-      renderResults();
-      renderPilots();
-      renderKPIs();
-      drawPaceCanvas();
-      renderProducts();
-      renderCart();
-      renderChecklist();
-      renderPlanner();
-      initReveal();
+      // nav
+      $("#btnLogin").addEventListener("click", openLogin);
+      $("#btnLogin2").addEventListener("click", openLogin);
+      $("#btnOpenLogin").addEventListener("click", openLogin);
+      $("#btnOpenLogin3").addEventListener("click", openLogin);
+      $("#btnOpenLogin4").addEventListener("click", openLogin);
+      $("#btnOpenLoginFooter").addEventListener("click", openLogin);
 
-      // Filters
-      $("#filterSerie").addEventListener("change", ()=>{ renderCalendar(); persistFilters(); });
-      $("#filterCar").addEventListener("change", ()=>{ renderCalendar(); persistFilters(); });
+      $("#btnLogout").addEventListener("click", ()=>{ auth.logout(); setAuthedUI(); toast("Logged out"); if (location.hash==="#admin") location.hash="#home"; });
+      $("#btnLogout2").addEventListener("click", ()=>{ auth.logout(); setAuthedUI(); toast("Logged out"); location.hash="#home"; });
+      $("#btnBackHome").addEventListener("click", ()=>{ /* just link */ });
 
-      // Results search
-      $("#resultsSearch").addEventListener("input", renderResults);
-
-      // Pilot filters
-      $("#pilotSearch").addEventListener("input", renderPilots);
-      $("#pilotRole").addEventListener("change", renderPilots);
-
-      // Calendar ICS
-      $("#racesTbody").addEventListener("click", (e)=>{
-        const btn = e.target.closest("button[data-ics]");
-        if (!btn) return;
-        const data = JSON.parse(btn.dataset.ics);
-        const start = toDateTimeLocal(data.startISO.slice(0,10), data.startISO.slice(11,16));
-        const ics = buildICSEvent({
-          title: data.title,
-          start,
-          durationMin: data.durationMin || 60,
-          description: `DFM event (mock)\nTZ=${TZ}`
-        });
-        downloadICS("dfm-event.ics", ics);
-        toast("ICS gerado", data.title);
-      });
-
-      // Training reminders (per-slot)
-      $("#weekGrid").addEventListener("click", async (e)=>{
-        const btn = e.target.closest("button[data-remind]");
-        if (!btn) return;
-        const x = JSON.parse(btn.dataset.remind);
-        const when = nextOccurrenceByDowTime(x.dow, x.time);
-        const ok = await requestNotifications();
-        if (!ok) return;
-        scheduleLocalReminder(when, `Treino: ${x.title} • ${x.time}`);
-      });
-
-      // Remember next session (hero)
-      $("#btnRememberNext").addEventListener("click", async ()=>{
-        const data = JSON.parse($("#btnRememberNext").dataset.remindNext || "{}");
-        if (!data.when) return toast("Sem sessão para lembrar");
-        const when = new Date(data.when);
-        const ok = await requestNotifications();
-        if (!ok) return;
-        scheduleLocalReminder(when, data.text);
-      });
-
-      // Remember next training (button)
-      $("#btnRememberAll").addEventListener("click", async ()=>{
-        const next = nextOccurrenceByDowTime(openTrainingRule.dow, openTrainingRule.time);
-        const ok = await requestNotifications();
-        if (!ok) return;
-        scheduleLocalReminder(next, `Treino aberto • ${fmtTimePT(next)}`);
-      });
-
-      // Notification test
-      $("#btnNotifTest").addEventListener("click", async ()=>{
-        const ok = await requestNotifications();
-        if (!ok) return;
-        toast("Teste OK", "Se permitido, também sai notificação.");
-        try{ new Notification("DFM — Teste", { body:"Notificações ativas (mock)" }); }catch(e){}
-      });
-
-      // Quick reveal scroll
-      $("#btnQuickReveal").addEventListener("click", ()=>{
-        location.hash = "#stats";
-        toast("Dashboard", "A saltar para Stats");
-      });
-
-      // Scroll to widgets
-      $("#btnScrollWidgets").addEventListener("click", ()=>{
-        location.hash = "#widgets";
-      });
-
-      // Products add
-      $("#productsGrid").addEventListener("click", (e)=>{
-        const btn = e.target.closest("button[data-add]");
-        if (!btn) return;
-        addToCart(btn.dataset.add);
-      });
-
-      // Cart controls
-      $("#cartList").addEventListener("click", (e)=>{
-        const items = loadCart();
-        const inc = e.target.closest("button[data-inc]");
-        const dec = e.target.closest("button[data-dec]");
-        const del = e.target.closest("button[data-del]");
-        const id = inc?.dataset.inc || dec?.dataset.dec || del?.dataset.del;
-        if (!id) return;
-
-        const it = items.find(x=>x.id===id);
-        if (!it) return;
-
-        if (inc) it.qty++;
-        if (dec) it.qty = Math.max(1, it.qty-1);
-        if (del) items.splice(items.indexOf(it), 1);
-
-        saveCart(items);
-        renderCart();
-      });
-
-      $("#btnClearCart").addEventListener("click", ()=>{
-        saveCart([]);
-        renderCart();
-        toast("Carrinho limpo");
-      });
-
-      $("#btnSaveCart").addEventListener("click", ()=>{
-        toast("Carrinho guardado", "localStorage");
-      });
-
-      // Planner
-      ["plFuel","plPit","plTires"].forEach(id=>{
-        $("#"+id).addEventListener("input", updatePlannerOut);
-      });
-      $("#btnSavePlanner").addEventListener("click", ()=>{
-        const v = { fuel: $("#plFuel").value, pit: $("#plPit").value, tires: $("#plTires").value };
-        savePlanner(v);
-        updatePlannerOut();
-        toast("Planner guardado");
-      });
-      $("#btnResetPlanner").addEventListener("click", ()=>{
-        savePlanner({fuel:"",pit:"",tires:""});
-        renderPlanner();
-        toast("Planner reposto");
-      });
-
-      // Reset prefs
-      $("#btnResetPrefs").addEventListener("click", ()=>{
-        localStorage.removeItem(CART_KEY);
-        localStorage.removeItem(CHECK_KEY);
-        localStorage.removeItem(PLAN_KEY);
-        localStorage.removeItem("dfm_filters_v1");
-        renderCart();
-        renderChecklist();
-        renderPlanner();
-        toast("Preferências repostas");
-      });
-
-      // Optional theme toggle (apenas demo)
-      $("#btnToggleTheme").addEventListener("click", ()=>{
-        document.body.classList.toggle("alt");
-        toast("Tema (mock)", "Sem tema alternativo definido.");
-      });
-
-      // Pilot modal
-      $("#pilotGrid").addEventListener("click", (e)=>{
-        const card = e.target.closest(".pilot[data-pilot]");
-        if (!card) return;
-        const p = pilots.find(x=>x.id===card.dataset.pilot);
-        if (p) openPilotModal(p);
-      });
-      $("#pilotGrid").addEventListener("keydown", (e)=>{
-        if (e.key !== "Enter") return;
-        const card = e.target.closest(".pilot[data-pilot]");
-        if (!card) return;
-        const p = pilots.find(x=>x.id===card.dataset.pilot);
-        if (p) openPilotModal(p);
-      });
-
-      $("#closeModal").addEventListener("click", closePilotModal);
-      $("#pilotModal").addEventListener("click", (e)=>{
-        if (e.target.id === "pilotModal") closePilotModal();
-      });
-      document.addEventListener("keydown", (e)=>{
-        if (e.key==="Escape") {
-          closePilotModal();
-          closeDrawer();
-        }
-      });
-
-      // Drawer
+      // drawer
       $("#openDrawer").addEventListener("click", openDrawer);
       $("#closeDrawer").addEventListener("click", closeDrawer);
-      $("#drawer").addEventListener("click", (e)=>{
-        if (e.target.id === "drawer") closeDrawer();
-      });
+      $("#drawer").addEventListener("click", (e)=>{ if (e.target.id==="drawer") closeDrawer(); });
       $("#drawerLinks").addEventListener("click", (e)=>{
         const a = e.target.closest("a");
-        if (!a) return;
-        closeDrawer();
+        if (a) closeDrawer();
+      });
+      $("#drawerLogin").addEventListener("click", ()=>{ closeDrawer(); openLogin(); });
+      $("#drawerLogout").addEventListener("click", ()=>{ closeDrawer(); auth.logout(); setAuthedUI(); toast("Logged out"); if (location.hash==="#admin") location.hash="#home"; });
+
+      // login modal
+      $("#btnOpenLogin").addEventListener("click", openLogin);
+      $("#closeLogin").addEventListener("click", closeLogin);
+      $("#loginModal").addEventListener("click", (e)=>{ if (e.target.id==="loginModal") closeLogin(); });
+      document.addEventListener("keydown", (e)=>{ if (e.key==="Escape") { closeLogin(); closeDrawer(); } });
+
+      $("#demoFill").addEventListener("click", ()=>{
+        $("#loginEmail").value = "admin@downforcemafia.gg";
+        $("#loginOrg").value = "Downforce Mafia";
+        $("#loginPass").value = "demo-password";
+        toast("Demo credentials filled");
       });
 
-      // Streaming mock
-      $("#btnToggleLive").addEventListener("click", toggleLive);
-      $("#btnOverlayDemo").addEventListener("click", overlayDemo);
-      $("#btnCopyOverlay").addEventListener("click", copyOverlayJSON);
-
-      // Recruit form (mock)
-      $("#recruitForm").addEventListener("submit", (e)=>{
-        e.preventDefault();
-        const name = $("#rName").value.trim();
-        const discord = $("#rDiscord").value.trim();
-        if (!name || !discord){
-          toast("Preenche nome e Discord", "Obrigatório");
+      $("#doLogin").addEventListener("click", ()=>{
+        const email = $("#loginEmail").value.trim();
+        const org = $("#loginOrg").value.trim();
+        const pass = $("#loginPass").value.trim();
+        if (!email || !pass){
+          toast("Missing fields", "Email and password are required.");
           return;
         }
-        toast("Candidatura enviada (mock)", "Liga isto ao teu backend quando quiseres.");
+        auth.login({ email, org });
+        setAuthedUI();
+        closeLogin();
+        toast("Logged in", email);
+        location.hash = "#admin";
+        routeFromHash();
+      });
+
+      // pricing buttons open login (demo)
+      document.addEventListener("click", (e)=>{
+        const btn = e.target.closest("button[data-plan]");
+        if (!btn) return;
+        openLogin();
+        toast("Select plan (demo)", `Plan: ${btn.dataset.plan}`);
+      });
+
+      // contact form demo
+      $("#contactForm").addEventListener("submit", (e)=>{
+        e.preventDefault();
+        toast("Message sent (demo)", "Hook this to your backend/email provider.");
         e.target.reset();
       });
 
-      // Persist filters
-      restoreFilters();
+      // tabs
+      $$(".tab").forEach(t=>{
+        t.addEventListener("click", ()=>{
+          setTab(t.dataset.tab);
+        });
+      });
+
+      // admin actions
+      $("#btnNewEvent").addEventListener("click", ()=>{ if (guardAdmin()) newEvent(); });
+      $("#btnInvite").addEventListener("click", ()=>{ if (guardAdmin()) inviteMember(); });
+      $("#btnSaveSettings").addEventListener("click", ()=>{ if (guardAdmin()) saveSettings(); });
+      $("#btnResetData").addEventListener("click", ()=>{ if (guardAdmin()) resetDemoData(); });
+
+      // table delegates
+      $("#eventsTbody").addEventListener("click", (e)=>{
+        const edit = e.target.closest("button[data-edit-event]");
+        const del = e.target.closest("button[data-del-event]");
+        if (edit) return editEvent(edit.dataset.editEvent);
+        if (del) return delEvent(del.dataset.delEvent);
+      });
+      $("#membersTbody").addEventListener("click", (e)=>{
+        const edit = e.target.closest("button[data-edit-member]");
+        const del = e.target.closest("button[data-del-member]");
+        if (edit) return editMember(edit.dataset.editMember);
+        if (del) return delMember(del.dataset.delMember);
+      });
+
+      // initial route
+      routeFromHash();
     }
 
-    /* ---------------------------
-      FILTERS PERSIST (localStorage)
-    --------------------------- */
-    function persistFilters(){
-      const v = {
-        serie: $("#filterSerie").value,
-        car: $("#filterCar").value
-      };
-      localStorage.setItem("dfm_filters_v1", JSON.stringify(v));
-    }
-    function restoreFilters(){
-      const saved = JSON.parse(localStorage.getItem("dfm_filters_v1") || "null");
-      if (!saved) return;
-      if (saved.serie) $("#filterSerie").value = saved.serie;
-      if (saved.car) $("#filterCar").value = saved.car;
-      renderCalendar();
-    }
-
-    // Setup placeholder click
-    document.addEventListener("click", (e)=>{
-      const a = e.target.closest("a[data-setup]");
-      if (!a) return;
-      e.preventDefault();
-      toast("Setup (placeholder)", a.dataset.setup);
-    });
-
-    // Boot
     init();
   </script>
 </body>
